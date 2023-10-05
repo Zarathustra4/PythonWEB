@@ -16,4 +16,8 @@ except Exception as e:
 else:
     print("The message was sent")
 
+echo_message = client_socket.recv(1024)
+
+print(f"[Echo message] - {echo_message.decode()}")
+
 client_socket.close()
