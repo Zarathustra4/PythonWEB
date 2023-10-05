@@ -20,8 +20,9 @@ try:
 except Exception as e:
     print(e)
 else:
-    print("[Message is recieved]")
+    print("---[Message is recieved]---")
     print(f"\t[Message] - {message.decode()}")
     print(f"\t[Time] - {datetime.now()}")
+    print("---------------------------")
 
 connection.close()
