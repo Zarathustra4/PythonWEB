@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="post">
+        <div class="credent">
+            <label for="login">Логін</label>
+            <input id="login" name="login" type="text"><br>
+        </div>
+
+        <div class="credent">
+            <label for="password">Пароль</label>
+            <input type="password" name="password", type="text"><br>
+        </div>
+        
+        <input value="pnu" type="checkbox"><label>Я навчаюся в ПНУ</label><br><br>
+        <input value="ipz" type="checkbox"><label>Я навчаюся на спеціальності ІПЗ</label><br><br>
+        <input value="group" type="checkbox"><label>Я навчаюся у першій групі на потоці</label><br><br>
+        
+        <input type="submit" value="submit">
+    </form>
+</body>
+
+<style>
+    .credent{
+        display: flex;
+        justify-content: space-around;
+        width: 250px;
+    }
+</style>
+
+</html>
