@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body onload="set_cookie('authorized', 0, 1);">
+<body>
     <form action="/cgi-bin/form_handler.py" method="post">
         <div class="credent">
             <label for="login">Логін</label>
@@ -37,52 +37,15 @@
             <input type="radio" name="occupation" id="teacher" value="student">
 
         </div>
-        <input type="submit" onclick="submit()" value="submit">
+        <input type="submit" value="submit">
     </form>
 
 
-    <button class="clear" onclick="clear_cookies()">Clear cookies</button>
+    <button class="clear">Clear cookies</button>
 </body>
 
 <script>
-    function clear_cookies(){
-        set_cookie("authorized", "", 1);
-        set_cookie("counter", "", 1);
-        set_cookie("username", "", 1);
 
-        alert("Cookies are cleared")
-    }
-
-    function set_cookie(name, value, daysToExpire) {
-        var expires = "";
-        if (daysToExpire) {
-            var date = new Date();
-            date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
-            expires = "; expires=" + date.toUTCString();
-        }
-        document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
-    }
-
-    function submit() {
-        var count = get_cookie("count");
-        if (count === null) {
-            count = 1;
-        } else {
-            count = parseInt(count) + 1;
-        }
-        set_cookie("count", count, 1);
-    }
-
-    function get_cookie(name) {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim().split('=');
-            if (cookie[0] === name) {
-                return decodeURIComponent(cookie[1]);
-            }
-        }
-        return null;
-    }
 </script>
 
 <style>
