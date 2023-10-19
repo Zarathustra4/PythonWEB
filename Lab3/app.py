@@ -11,3 +11,10 @@ def main_page():
 @app.route("/hobbies")
 def hobbies_page():
     return render_template("hobbies.html")
+
+
+@app.route("/study")
+def study_page():
+    return render_template("studying.html")
+
+
