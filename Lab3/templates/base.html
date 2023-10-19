@@ -25,9 +25,9 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="http://127.0.0.1:5000/">Main</a>
-                    <a class="nav-item nav-link" href="http://127.0.0.1:5000/hobbies">Hobbies</a>
-                    <a class="nav-item nav-link" href="http://127.0.0.1:5000/study">Studying</a>
+                    <a class="nav-item nav-link" href="{{ url_for('main_page') }}">Main</a>
+                    <a class="nav-item nav-link" href="{{url_for('hobbies_page')}}">Hobbies</a>
+                    <a class="nav-item nav-link" href="{{url_for('study_page')}}">Studying</a>
                 </div>
             </div>
         </nav>
@@ -42,14 +42,15 @@
         <div class="text-wrapper">
             <p class="text">
                 {% block text %}
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore cupiditate tempora quasi non eum
-                aspernatur. Dolorum omnis ab magnam quod, atque et sit officia voluptatum debitis, a quos quas aliquam.
                 {% endblock %}
             </p>
         </div>
     </main>
 
-
+    <footer>
+        <h2>System - {{os_name}}</h2>
+        <h2>User agent - {{user_agent}}</h2>
+    </footer>
 </body>
 
 </html>
