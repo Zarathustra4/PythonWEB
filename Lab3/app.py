@@ -3,6 +3,7 @@ import platform
 
 app = Flask(__name__)
 
+SKILLS = ["C++", "Python", "Java", "Spring", "Math", "SQL", "REST API", "Git", "Linux", "HTML/CSS"]
 
 @app.route("/")
 def main_page():
@@ -25,3 +26,19 @@ def study_page():
                            user_agent=request.user_agent)
 
 
+@app.route("/skills")
+@app.route("/skills/<int:id>")
+def skills_page(id=None):
+    if id:
+        try:
+            skills = SKILLS[id:id + 1]
+        except IndexError:
+            skills = ["Wrong index!!!"]
+    else:
+        skills = SKILLS
+
+    return render_template("skills.html",
+                           os_name=platform.system(),
+                           user_agent=request.user_agent,
+                           len=len(skills),
+                           skills=skills)
