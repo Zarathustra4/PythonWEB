@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block image %}
+{% endblock %}
+
+{% block text %}
+    {%for i in range(0, len)%}
+
+    <p>{{skills[i]}}</p>
+    {%endfor%}
+{% endblock %}
