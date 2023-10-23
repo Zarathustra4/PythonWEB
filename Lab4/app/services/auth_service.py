@@ -2,15 +2,15 @@ import json
 from functools import wraps
 from hashlib import sha256
 from flask import session, redirect, url_for
-from exception import UserInputException
 
 """
 The password is encrypted by sha256 algorithm
 """
 
 
-def get_session_dict() -> dict:
-    return dict(session)
+class UserInputException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
 
 
 class AuthService:
@@ -52,17 +52,21 @@ class AuthService:
         return login_required
 
     def change_pass(self, old_pass: str, new_pass: str, repeat_pass: str) -> None:
-        if sha256(old_pass).hexdigest() != self.credentials["password"]:
+        if sha256(old_pass.encode()).hexdigest() != self.credentials["password"]:
             raise UserInputException("Wrong password!!!")
         if new_pass != repeat_pass:
             raise UserInputException("New password and repeated password are not same!!!")
         if len(new_pass) < 4:
             raise UserInputException("Password must be at least 4 characters long")
 
-        new_pass = sha256().hexdigest()
+        new_pass = sha256(new_pass.encode()).hexdigest()
         self.credentials["password"] = new_pass
 
         json_cred = json.dumps(self.credentials, indent=2)
 
         with open(self.json_path, "w") as f:
             f.write(json_cred)
+
+
+def get_session_dict() -> dict:
+    return dict(session)

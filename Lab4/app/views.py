@@ -1,7 +1,7 @@
 from app import app
 from app.services.auth_service import AuthService
 from app.services.auth_service import get_session_dict
-from app.services.exception import UserInputException
+from app.services.auth_service import UserInputException
 from flask import render_template, request, redirect, url_for, session
 import platform
 import datetime
@@ -120,6 +120,10 @@ def change_password():
     try:
         auth_service.change_pass(old_pass, new_pass, repeat_pass)
     except UserInputException as e:
-        return render_template("error.html", message=str(e))
+        return render_template("error.html",
+                               os_name=platform.system(),
+                               user_agent=request.user_agent,
+                               time=datetime.datetime.now(),
+                               message=str(e))
 
     return redirect(url_for("main_page"))

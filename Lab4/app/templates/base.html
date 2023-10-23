@@ -36,8 +36,11 @@
                 <a class="nav-item nav-link" href="{{ url_for('skills_page') }}">Skills</a>
             </div>
         </div>
-        <form class="logout" action="/logout" method="POST">
-            <button type="submit" class="btn btn-outline-secondary">Вийти</button>
+        <form class="header-form" action="/change-password" method="get">
+            <button type="submit" class="btn btn-outline-dark">Change password</button>
+        </form>
+        <form class="header-form" action="/logout" method="POST">
+            <button type="submit" class="btn btn-outline-secondary">Log out</button>
         </form>
     </nav>
 
