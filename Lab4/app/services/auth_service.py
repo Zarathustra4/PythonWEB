@@ -1,24 +1,24 @@
 import json
 from functools import wraps
 from hashlib import sha256
-from flask import session, request, redirect, url_for, g
+from flask import session, redirect, url_for
+from exception import UserInputException
 
 """
 The password is encrypted by sha256 algorithm
 """
 
 
-def parse_json():
-    json_path = "app/static/json/credentials.json"
-    with open(json_path) as json_file:
-        credentials = json.load(json_file)
-
-    return credentials
+def get_session_dict() -> dict:
+    return dict(session)
 
 
 class AuthService:
     def __init__(self):
-        self.credentials = parse_json()
+        self.json_path = "app/static/json/credentials.json"
+        with open(self.json_path) as json_file:
+            self.credentials = json.load(json_file)
+
         self._SESSION_KEY = "user_login"
 
     def authenticate(self, login: str, password: str) -> bool:
@@ -32,11 +32,12 @@ class AuthService:
         session[self._SESSION_KEY] = value
 
     def is_pre_authorized(self):
-        if not session:
-            return False
-        if session[self._SESSION_KEY] == self.credentials["login"]:
+        if session and session[self._SESSION_KEY] == self.credentials["login"]:
             return True
         return False
+
+    def get_session_key(self):
+        return session[self._SESSION_KEY]
 
     def get_pre_login_decorator(self):
         def login_required(f):
@@ -50,6 +51,18 @@ class AuthService:
 
         return login_required
 
+    def change_pass(self, old_pass: str, new_pass: str, repeat_pass: str) -> None:
+        if sha256(old_pass).hexdigest() != self.credentials["password"]:
+            raise UserInputException("Wrong password!!!")
+        if new_pass != repeat_pass:
+            raise UserInputException("New password and repeated password are not same!!!")
+        if len(new_pass) < 4:
+            raise UserInputException("Password must be at least 4 characters long")
 
-if __name__ == "__main__":
-    print(parse_json())
+        new_pass = sha256().hexdigest()
+        self.credentials["password"] = new_pass
+
+        json_cred = json.dumps(self.credentials, indent=2)
+
+        with open(self.json_path, "w") as f:
+            f.write(json_cred)

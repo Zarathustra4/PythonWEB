@@ -1,18 +1,24 @@
 from app import app
 from app.services.auth_service import AuthService
-from flask import render_template, request, redirect, url_for
+from app.services.auth_service import get_session_dict
+from app.services.exception import UserInputException
+from flask import render_template, request, redirect, url_for, session
 import platform
 import datetime
 
-SKILLS = ["C++", "Python", "Java", "Spring", "Math", "SQL", "REST API", "Git", "Linux", "HTML/CSS"]
-AUTH_SERVICE = AuthService()
 
-pre_authorized = AUTH_SERVICE.get_pre_login_decorator()
+SKILLS = ["C++", "Python", "Java", "Spring", "Math", "SQL", "REST API", "Git", "Linux", "HTML/CSS"]
+auth_service = AuthService()
+
+pre_authorized = auth_service.get_pre_login_decorator()
+
 
 @app.route("/")
 @pre_authorized
 def main_page():
     return render_template("index.html",
+                           cookies=get_session_dict(),
+                           user_login=auth_service.get_session_key(),
                            os_name=platform.system(),
                            user_agent=request.user_agent,
                            time=datetime.datetime.now())
@@ -68,8 +74,52 @@ def login_page():
 def login():
     login_input = request.form.get('login')
     password_input = request.form.get('password')
-    if AUTH_SERVICE.authenticate(login_input, password_input):
-        AUTH_SERVICE.set_session_value(value=login_input)
+    if auth_service.authenticate(login_input, password_input):
+        auth_service.set_session_value(value=login_input)
         return redirect(url_for("main_page"))
     else:
         return render_template("login.html", message="Wrong login or password")
+
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+
+@app.route("/cookie", methods=["POST"])
+def post_cookie():
+    key = request.form.get('key')
+    value = request.form.get('value')
+    session[key] = value
+    return redirect(url_for("main_page"))
+
+
+@app.route("/cookie/delete/<key>", methods=["POST"])
+@app.route("/cookie/delete", methods=["POST"])
+def delete_cookie(key=None):
+    if key:
+        session.pop(key)
+    else:
+        session.clear()
+    return redirect(url_for("main_page"))
+
+
+@app.route("/change-password", methods=["GET"])
+def change_password_page():
+    return render_template("change-password.html",
+                           os_name=platform.system(),
+                           user_agent=request.user_agent,
+                           time=datetime.datetime.now())
+
+@app.route("/change-password", methods=["POST"])
+def change_password():
+    old_pass = request.form.get("old-password")
+    new_pass = request.form.get("new-password")
+    repeat_pass = request.form.get("repeat-password")
+    try:
+        auth_service.change_pass(old_pass, new_pass, repeat_pass)
+    except UserInputException as e:
+        return render_template("error.html", message=str(e))
+
+    return redirect(url_for("main_page"))

@@ -4,12 +4,16 @@
     Login
 {% endblock %}
 
+{% block links %}
+    <link rel="stylesheet" href="../static/css/info.css">
+{% endblock %}
+
 {% block content %}
     {% if message %}
         <h3 class="error-message">{{ message }}</h3>
     {% endif %}
 
-    <form action="/login" method="post">
+    <form class="center-form" action="/login" method="post">
         <div class="form-group">
             <label for="login"><b>Login</b></label>
             <input type="text" class="form-control" name="login" id="login" placeholder="Enter login">

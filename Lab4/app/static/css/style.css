@@ -42,3 +42,6 @@ footer {
     text-align: center;
 }
 
+form.logout {
+    float: right;
+}
