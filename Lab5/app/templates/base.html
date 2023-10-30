@@ -26,25 +26,7 @@
 
 <body>
 
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{{ url_for('main_page') }}">Info</a>
-                <a class="nav-item nav-link" href="{{ url_for('hobbies_page') }}">Hobbies</a>
-                <a class="nav-item nav-link" href="{{ url_for('study_page') }}">Studying</a>
-                <a class="nav-item nav-link" href="{{ url_for('skills_page') }}">Skills</a>
-            </div>
-        </div>
-        <form class="header-form" action="/change-password" method="get">
-            <button type="submit" class="btn btn-outline-dark">Change password</button>
-        </form>
-        <form class="header-form" action="/logout" method="POST">
-            <button type="submit" class="btn btn-outline-secondary">Log out</button>
-        </form>
-    </nav>
-
-</header>
+{% include "header.html" %}
 
 <main>
     {% block content %}
@@ -61,11 +43,7 @@
         </div>
     {% endblock %}
 </main>
-<footer>
-    <h2>System - {{ os_name }}</h2>
-    <h2>User agent - {{ user_agent }}</h2>
-    <h2>Time - {{ time }}</h2>
-</footer>
 </body>
-
+{% block footer %}
+{% endblock %}
 </html>

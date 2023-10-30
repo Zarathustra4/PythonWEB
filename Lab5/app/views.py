@@ -5,7 +5,7 @@ from app.services.auth_service import UserInputException
 from flask import render_template, request, redirect, url_for, session
 import platform
 import datetime
-
+from app.forms.loginform import LoginForm
 
 SKILLS = ["C++", "Python", "Java", "Spring", "Math", "SQL", "REST API", "Git", "Linux", "HTML/CSS"]
 auth_service = AuthService()
@@ -27,19 +27,13 @@ def main_page():
 @app.route("/hobbies")
 @pre_authorized
 def hobbies_page():
-    return render_template("hobbies.html",
-                           os_name=platform.system(),
-                           user_agent=request.user_agent,
-                           time=datetime.datetime.now())
+    return render_template("hobbies.html")
 
 
 @app.route("/study")
 @pre_authorized
 def study_page():
-    return render_template("studying.html",
-                           os_name=platform.system(),
-                           user_agent=request.user_agent,
-                           time=datetime.datetime.now())
+    return render_template("studying.html")
 
 
 @app.route("/skills")
@@ -54,9 +48,6 @@ def skills_page(id=None):
         skills = SKILLS
 
     return render_template("skills.html",
-                           os_name=platform.system(),
-                           user_agent=request.user_agent,
-                           time=datetime.datetime.now(),
                            len=len(skills),
                            is_list=is_list,
                            skills=skills)
@@ -64,14 +55,14 @@ def skills_page(id=None):
 
 @app.route("/login", methods=['GET'])
 def login_page():
-    return render_template("login.html",
-                           os_name=platform.system(),
-                           user_agent=request.user_agent,
-                           time=datetime.datetime.now())
+    return render_template("login.html")
 
 
 @app.route("/login", methods=['POST'])
 def login():
+    login_form = LoginForm()
+    if login_form.validate():
+        pass
     login_input = request.form.get('login')
     password_input = request.form.get('password')
     if auth_service.authenticate(login_input, password_input):
@@ -108,10 +99,8 @@ def delete_cookie(key=None):
 @app.route("/change-password", methods=["GET"])
 @pre_authorized
 def change_password_page():
-    return render_template("change-password.html",
-                           os_name=platform.system(),
-                           user_agent=request.user_agent,
-                           time=datetime.datetime.now())
+    return render_template("change-password.html")
+
 
 @app.route("/change-password", methods=["POST"])
 def change_password():
@@ -121,10 +110,6 @@ def change_password():
     try:
         auth_service.change_pass(old_pass, new_pass, repeat_pass)
     except UserInputException as e:
-        return render_template("error.html",
-                               os_name=platform.system(),
-                               user_agent=request.user_agent,
-                               time=datetime.datetime.now(),
-                               message=str(e))
+        return render_template("error.html", message=str(e))
 
     return redirect(url_for("main_page"))
