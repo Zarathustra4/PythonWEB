@@ -55,21 +55,24 @@ def skills_page(id=None):
 
 @app.route("/login", methods=['GET'])
 def login_page():
-    return render_template("login.html")
+    login_form = LoginForm()
+    return render_template("login.html", form=login_form)
 
 
 @app.route("/login", methods=['POST'])
 def login():
     login_form = LoginForm()
-    if login_form.validate():
-        pass
-    login_input = request.form.get('login')
-    password_input = request.form.get('password')
+    if not login_form.validate():
+        return render_template("login.html", message="Fill all the input fields")
+
+    login_input = login_form.login.data
+    password_input = login_form.password.data
+
     if auth_service.authenticate(login_input, password_input):
         auth_service.set_session_value(value=login_input)
         return redirect(url_for("main_page"))
-    else:
-        return render_template("login.html", message="Wrong login or password")
+
+    return render_template("login.html", message="Wrong login or password")
 
 
 @app.route("/logout", methods=["POST"])

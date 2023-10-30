@@ -32,7 +32,7 @@ class AuthService:
         session[self._SESSION_KEY] = value
 
     def is_pre_authorized(self):
-        if session and session[self._SESSION_KEY] == self.credentials["login"]:
+        if session and session.get(self._SESSION_KEY) == self.credentials.get("login"):
             return True
         return False
 
