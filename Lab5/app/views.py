@@ -63,18 +63,20 @@ def login_page():
 def login():
     login_form = LoginForm()
     if not login_form.validate():
-        return render_template("login.html", message="Fill all the input fields")
+        flash("Form is not valid", category="error")
+        return redirect(url_for("login_page"))
 
     login_input = login_form.login.data
     password_input = login_form.password.data
+    remember_input = login_form.remember.data
 
     if auth_service.authenticate(login_input, password_input):
         auth_service.set_session_value(value=login_input)
         flash("You were successfully logged in", category="message")
-        return redirect(url_for("main_page"))
+        return redirect(url_for("main_page")) if not remember_input else redirect(url_for("skills_page"))
 
     flash("Wrong login or password", category="error")
-    return redirect(url_for("login"))
+    return redirect(url_for("login_page"))
 
 
 @app.route("/logout", methods=["POST"])
