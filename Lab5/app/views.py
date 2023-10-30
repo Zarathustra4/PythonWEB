@@ -5,7 +5,7 @@ from app.services.auth_service import UserInputException
 from flask import render_template, request, redirect, url_for, session, flash
 import platform
 import datetime
-from app.forms.loginform import LoginForm
+from app.forms.loginform import LoginForm, ChangePassForm
 
 SKILLS = ["C++", "Python", "Java", "Spring", "Math", "SQL", "REST API", "Git", "Linux", "HTML/CSS"]
 auth_service = AuthService()
@@ -106,17 +106,26 @@ def delete_cookie(key=None):
 @app.route("/change-password", methods=["GET"])
 @pre_authorized
 def change_password_page():
-    return render_template("change-password.html")
+    form = ChangePassForm()
+    return render_template("change-password.html", form=form)
 
 
 @app.route("/change-password", methods=["POST"])
 def change_password():
-    old_pass = request.form.get("old-password")
-    new_pass = request.form.get("new-password")
-    repeat_pass = request.form.get("repeat-password")
+    change_pass_form = ChangePassForm()
+    if not change_pass_form.validate():
+        flash("Form is not valid", category="error")
+        return redirect(url_for("change_password_page"))
+
+    old_pass = change_pass_form.old_password.data
+    new_pass = change_pass_form.new_password.data
+    repeat_pass = change_pass_form.repeated_password.data
+
     try:
         auth_service.change_pass(old_pass, new_pass, repeat_pass)
     except UserInputException as e:
-        return render_template("error.html", message=str(e))
+        flash(str(e), category="error")
+        return redirect(url_for("change_password_page"))
 
+    flash("The password was successfully changed", category="message")
     return redirect(url_for("main_page"))
