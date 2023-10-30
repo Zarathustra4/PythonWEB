@@ -18,6 +18,7 @@
         {{ form.csrf_token() }}
         {{ render_field(form.login, class="form-control") }}
         {{ render_field(form.password, type="password", class="form-control") }}
-        <button type="submit" class="btn btn-success">Submit</button>
+        {{ render_field(form.remember) }}
+        {{ form.submit(class="btn btn-success") }}
     </form>
 {% endblock %}

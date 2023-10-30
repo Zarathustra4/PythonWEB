@@ -2,7 +2,7 @@ from app import app
 from app.services.auth_service import AuthService
 from app.services.auth_service import get_session_dict
 from app.services.auth_service import UserInputException
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, flash
 import platform
 import datetime
 from app.forms.loginform import LoginForm
@@ -70,9 +70,11 @@ def login():
 
     if auth_service.authenticate(login_input, password_input):
         auth_service.set_session_value(value=login_input)
+        flash("You were successfully logged in", category="message")
         return redirect(url_for("main_page"))
 
-    return render_template("login.html", message="Wrong login or password")
+    flash("Wrong login or password", category="error")
+    return redirect(url_for("login"))
 
 
 @app.route("/logout", methods=["POST"])
