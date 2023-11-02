@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block title %}
+    Reviews
+{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="../static/css/info.css">
+{% endblock %}
+
+{% block content %}
+    <form class="center-form" action="/review" method="post">
+        {{ form.csrf_token() }}
+        {{ render_field(form.name, class="form-control") }}
+        {{ render_field(form.message, class="form-control") }}
+        {{ form.submit(class="btn btn-success") }}
+    </form>
+    <h2>Залишені відгуки:</h2>
+    <ul>
+        {% for feedback in feedbacks %}
+        <li><strong>{{ feedback.name }}:</strong> {{ feedback.message }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

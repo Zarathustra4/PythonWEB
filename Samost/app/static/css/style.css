@@ -1,0 +1,48 @@
+main {
+    background-color: rgb(141, 185, 141);
+    width: 80%;
+    margin: 30px auto;
+    border-radius: 10px;
+    padding: 5%;
+    transition-duration: 1s;
+}
+
+main:hover {
+    box-shadow: 10px 5px 5px lightgreen;
+}
+
+img.main-image {
+    max-width: 90%;
+    max-height: 700px;
+    margin-top: 30px;
+}
+
+p.center {
+    text-align: center;
+}
+
+.text-wrapper {
+    background-color: rgba(211, 211, 211, .6);
+    padding: 10px;
+    border-radius: 5px;
+    transition-duration: 1s;
+}
+
+footer {
+    width: 100%;
+    background-color: #343434;
+    padding: 5%;
+    margin-top: 100px;
+    color: white;
+    text-align: center;
+}
+
+.error-message {
+    color: #ad4747;
+    text-align: center;
+}
+
+form.header-form {
+    float: right;
+    margin-right: 10px;
+}

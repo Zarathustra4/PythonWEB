@@ -1,0 +1,42 @@
+{% for cat, message in get_flashed_messages(True) %}
+    <div class="flashes">
+        <ul>
+            <li class="flash {{ cat }}">{{ message }}</li>
+        </ul>
+    </div>
+{% endfor %}
+
+<style>
+    ul {
+        list-style-type: none;
+    }
+
+    .flashes {
+        margin: 50px auto;
+        width: 50%;
+    }
+
+    .flash {
+        padding: 10px;
+        color: #fff;
+        text-align: center;
+        border-radius: 10px;
+        transition-duration: 1s;
+    }
+
+    .message {
+        background-color: #337ab7;
+    }
+
+    .message:hover {
+        box-shadow: 10px 5px 5px lightblue;
+    }
+
+    .error {
+        background-color: #b73333;
+    }
+
+    .error:hover {
+        box-shadow: 10px 5px 5px #c04848;
+    }
+</style>
