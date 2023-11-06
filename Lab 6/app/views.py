@@ -7,8 +7,7 @@ from flask import render_template, request, redirect, url_for, session, flash
 import platform
 import datetime
 from app.domain.forms import LoginForm, ChangePassForm, TodoForm
-from app.service.todo_service import add_todo
-
+from app.service.todo_service import add_todo, update_todo, delete_todo
 
 SKILLS = ["C++", "Python", "Java", "Spring", "Math", "SQL", "REST API", "Git", "Linux", "HTML/CSS"]
 auth_service = AuthService()
@@ -116,16 +115,9 @@ def change_password_page():
 @app.route("/change-password", methods=["POST"])
 def change_password():
     change_pass_form = ChangePassForm()
-    if not change_pass_form.validate():
-        flash("Form is not valid", category="error")
-        return redirect(url_for("change_password_page"))
-
-    old_pass = change_pass_form.old_password.data
-    new_pass = change_pass_form.new_password.data
-    repeat_pass = change_pass_form.repeated_password.data
 
     try:
-        auth_service.change_pass(old_pass, new_pass, repeat_pass)
+        auth_service.change_pass(change_pass_form)
     except UserInputException as e:
         flash(str(e), category="error")
         return redirect(url_for("change_password_page"))
@@ -135,6 +127,7 @@ def change_password():
 
 
 @app.route("/todo", methods=['GET'])
+@pre_authorized
 def todo_page():
     todo_form = TodoForm()
     todo_list = TodoModel.query.all()
@@ -142,6 +135,7 @@ def todo_page():
 
 
 @app.route("/todo", methods=['POST'])
+@pre_authorized
 def create_todo():
     todo_form = TodoForm()
     try:
@@ -152,3 +146,43 @@ def create_todo():
         flash("Todo was successfully addded!")
 
     return redirect(url_for("todo_page"))
+
+
+@app.route("/todo/update/<int:id>", methods=["GET"])
+def todo_update_page(id: int):
+    try:
+        todo_model = TodoModel.query.get(id)
+    except Exception as e:
+        flash(str(e), category="error")
+        return redirect(url_for('todo_page'))
+    todo_form = TodoForm()
+    todo_form.todo.data = todo_model.todo
+    todo_form.status.data = todo_model.status
+    todo_form.submit.label.text = 'Update'
+
+    return render_template("todo_update.html", id=id, form=todo_form)
+
+
+@app.route("/todo/update/<int:id>", methods=["POST"])
+def todo_update(id: int):
+    todo_form = TodoForm()
+    try:
+        update_todo(todo_form, id)
+    except UserInputException as e:
+        flash(str(e), category="error")
+    else:
+        flash("Todo task is updated")
+    finally:
+        return redirect(url_for("todo_page"))
+
+
+@app.route("/todo/delete/<int:id>", methods=["POST"])
+def todo_delete(id: int):
+    try:
+        delete_todo(id)
+    except UserInputException as e:
+        flash(str(e), category="error")
+    else:
+        flash("Todo task is deleted")
+    finally:
+        return redirect(url_for("todo_page"))

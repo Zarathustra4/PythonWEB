@@ -18,3 +18,17 @@ def add_todo(todo_form: TodoForm):
         raise UserInputException(str(e))
 
     return True
+
+
+def update_todo(todo_form: TodoForm, id: int):
+    todo_model = TodoModel.query.get(id)
+
+    todo_model.todo = todo_form.todo.data
+    todo_model.status = todo_form.status.data
+    db.session.commit()
+
+
+def delete_todo(id: int):
+    TodoModel.query.filter_by(id=id).delete()
+    db.session.commit()
+    return True

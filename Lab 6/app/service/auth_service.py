@@ -4,6 +4,7 @@ from hashlib import sha256
 from flask import session, redirect, url_for
 
 from app.domain.exception import UserInputException
+from app.domain.forms import ChangePassForm
 
 """
 The password is encrypted by sha256 algorithm
@@ -48,7 +49,14 @@ class AuthService:
 
         return login_required
 
-    def change_pass(self, old_pass: str, new_pass: str, repeat_pass: str) -> None:
+    def change_pass(self, change_pass_form: ChangePassForm) -> None:
+        if not change_pass_form.validate():
+            raise UserInputException("Form is not valid")
+
+        old_pass = change_pass_form.old_password.data
+        new_pass = change_pass_form.new_password.data
+        repeat_pass = change_pass_form.repeated_password.data
+
         if sha256(old_pass.encode()).hexdigest() != self.credentials["password"]:
             raise UserInputException("Wrong password!!!")
         if new_pass != repeat_pass:

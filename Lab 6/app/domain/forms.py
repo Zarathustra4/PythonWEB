@@ -25,7 +25,6 @@ class FeedbackForm(FlaskForm):
 
 
 class TodoForm(FlaskForm):
-    choices = [(e.name, e.value) for e in StatusEnum]
     todo = StringField('To Do', validators=[DataRequired()])
-    status = SelectField('Status', choices=choices)
+    status = SelectField('Status', choices=[(e.name, e.value) for e in StatusEnum])
     submit = SubmitField('Add task')
