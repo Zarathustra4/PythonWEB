@@ -3,14 +3,11 @@ from functools import wraps
 from hashlib import sha256
 from flask import session, redirect, url_for
 
+from app.domain.exception import UserInputException
+
 """
 The password is encrypted by sha256 algorithm
 """
-
-
-class UserInputException(Exception):
-    def __init__(self, message):
-        super().__init__(message)
 
 
 class AuthService:

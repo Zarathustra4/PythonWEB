@@ -10,16 +10,16 @@
 {% endblock %}
 
 {% block content %}
-    <form class="center-form" action="/review" method="post">
+    <form class="center-form" action="/todo" method="post">
         {{ form.csrf_token() }}
-        {{ render_field(form.name, class="form-control") }}
-        {{ render_field(form.message, class="form-control") }}
+        {{ render_field(form.todo, class="form-control") }}
+        {{ render_field(form.status, class="form-control") }}
         {{ form.submit(class="btn btn-success") }}
     </form>
     <h2>Залишені відгуки:</h2>
     <ul>
-        {% for feedback in feedbacks %}
-        <li><strong>{{ feedback.name }}:</strong> {{ feedback.message }}</li>
+        {% for todo in todo_list %}
+            <li><strong>{{ todo.todo }}:</strong> {{ todo.status }}</li>
         {% endfor %}
     </ul>
 {% endblock %}

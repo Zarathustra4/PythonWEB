@@ -1,13 +1,14 @@
 from app import app
-from app.domain.models import ReviewModel
+from app.domain.models import TodoModel
 from app.service.auth_service import AuthService
 from app.service.auth_service import get_session_dict
-from app.service.auth_service import UserInputException
+from app.domain.exception import UserInputException
 from flask import render_template, request, redirect, url_for, session, flash
 import platform
 import datetime
-from app.service.loginform import LoginForm, ChangePassForm, FeedbackForm
-from app import db
+from app.domain.forms import LoginForm, ChangePassForm, TodoForm
+from app.service.todo_service import add_todo
+
 
 SKILLS = ["C++", "Python", "Java", "Spring", "Math", "SQL", "REST API", "Git", "Linux", "HTML/CSS"]
 auth_service = AuthService()
@@ -133,29 +134,21 @@ def change_password():
     return redirect(url_for("main_page"))
 
 
-@app.route("/review", methods=["GET"])
-def review_page():
-    form = FeedbackForm()
-    feedbacks = ReviewModel.query.all()
-    return render_template('review.html', form=form, feedbacks=feedbacks)
+@app.route("/todo", methods=['GET'])
+def todo_page():
+    todo_form = TodoForm()
+    todo_list = TodoModel.query.all()
+    return render_template('todo.html', form=todo_form, todo_list=todo_list)
 
 
-@app.route("/review", methods=["POST"])
-def review():
-    review_form = FeedbackForm()
-    if not review_form.validate():
-        flash("Review form input is not valid!!!!", category="error")
-        return redirect(url_for("review_page"))
-
+@app.route("/todo", methods=['POST'])
+def create_todo():
+    todo_form = TodoForm()
     try:
-        name = review_form.name.data
-        message = review_form.message.data
-        review = ReviewModel(name=name, message=message)
-        db.session.add(review)
-        db.session.commit()
-    except Exception as e:
+        add_todo(todo_form)
+    except UserInputException as e:
         flash(str(e), category="error")
     else:
-        flash("Your review is added!", category="info")
+        flash("Todo was successfully addded!")
 
-    return redirect(url_for("review_page"))
+    return redirect(url_for("todo_page"))

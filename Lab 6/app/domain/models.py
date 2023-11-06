@@ -1,6 +1,15 @@
 from app import db, app
+from enum import Enum
 
-class ReviewModel(db.Model):
+
+class StatusEnum(Enum):
+    TODO = "To Do"
+    PROGRESS = "In Progress"
+    DONE = "Done"
+
+
+class TodoModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    message = db.Column(db.String(500), nullable=False)
+    todo = db.Column(db.String(100), nullable=False)
+    status = db.Column(db.Enum(StatusEnum))
+

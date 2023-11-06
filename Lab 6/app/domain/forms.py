@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, BooleanField, SubmitField, TextAreaField, SelectField
+from wtforms.validators import DataRequired, Length, AnyOf
+from app.domain.models import StatusEnum
 
 
 class LoginForm(FlaskForm):
@@ -22,3 +23,9 @@ class FeedbackForm(FlaskForm):
     message = TextAreaField('Відгук', validators=[DataRequired()])
     submit = SubmitField('Надіслати')
 
+
+class TodoForm(FlaskForm):
+    choices = [(e.name, e.value) for e in StatusEnum]
+    todo = StringField('To Do', validators=[DataRequired()])
+    status = SelectField('Status', choices=choices)
+    submit = SubmitField('Add task')
