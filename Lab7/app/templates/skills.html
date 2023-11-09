@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Skills
+{% endblock %}
+
+{% block image %}
+{% endblock %}
+
+{% block text %}
+
+    {%for i in range(0, len)%}
+        <p>{{skills[i]}}</p>
+    {%endfor%}
+    {% if is_list  %}
+        <p>The length of skills list = {{len}}</p>
+    {% endif %}
+{% endblock %}
