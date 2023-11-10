@@ -2,39 +2,57 @@ import json
 from functools import wraps
 from hashlib import sha256
 from flask import session, redirect, url_for
+from flask_bcrypt import Bcrypt
 
+from app import db
 from app.domain.exception import UserInputException
 from app.domain.forms import ChangePassForm
-
-"""
-The password is encrypted by sha256 algorithm
-"""
+from app.domain import forms
+from app.domain import models
 
 
 class AuthService:
     def __init__(self):
-        self.json_path = "app/static/json/credentials.json"
-        with open(self.json_path) as json_file:
-            self.credentials = json.load(json_file)
-
         self._SESSION_KEY = "user_login"
+        self.bcrypt = Bcrypt()
 
-    def authenticate(self, login: str, password: str) -> bool:
-        password = sha256(password.encode()).hexdigest()
+    def create_user(self, form: forms.RegisterForm):
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+        repeat_password = form.repeat_password.data
 
-        if login == self.credentials["login"] and password == self.credentials["password"]:
-            return True
-        return False
+        if password != repeat_password:
+            raise UserInputException("Passwords does not match!")
+        if models.UserModel.query.filter_by(username=username).first():
+            raise UserInputException(f"User with username {username} already exists")
+
+        new_user = models.UserModel(username=username, email=email)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+        self.set_session_value(username)
+
+    def authenticate(self, form: forms.LoginForm):
+        username = form.login.data
+        password = form.password.data
+
+        user: models.UserModel = models.UserModel.query.filter_by(username=username).first()
+        if not user:
+            raise UserInputException(f"No such a user with username {username}")
+
+        if user.check_password(password):
+            self.set_session_value(username)
+        else:
+            raise UserInputException("Wrong username of password")
 
     def set_session_value(self, value: str) -> None:
         session[self._SESSION_KEY] = value
 
-    def is_pre_authorized(self):
-        if session and session.get(self._SESSION_KEY) == self.credentials.get("login"):
-            return True
-        return False
+    def is_pre_authorized(self) -> bool:
+        return session and session.get(self._SESSION_KEY)
 
-    def get_session_key(self):
+    def get_session_value(self):
         return session[self._SESSION_KEY]
 
     def get_pre_login_decorator(self):
@@ -50,6 +68,7 @@ class AuthService:
         return login_required
 
     def change_pass(self, change_pass_form: ChangePassForm) -> None:
+        # TODO: change it for new db usage
         if not change_pass_form.validate():
             raise UserInputException("Form is not valid")
 
