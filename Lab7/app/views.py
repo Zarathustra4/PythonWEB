@@ -195,6 +195,9 @@ def signup_page():
 @app.route("/sign-up", methods=["POST"])
 def signup():
     form = forms.RegisterForm()
+    if not form.validate():
+        flash("Form is not valid", category="error")
+        return redirect(url_for("signup_page"))
     try:
         auth_service.create_user(form)
     except UserInputException as e:
@@ -204,3 +207,11 @@ def signup():
         flash("User was successfully created")
     return redirect(url_for('main_page'))
 
+
+
+@app.route("/users", methods=["GET"])
+def users_page():
+    users = AuthService.find_users()
+    return render_template('users.html',
+                           users_list=users,
+                           total_users=len(users))

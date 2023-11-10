@@ -26,6 +26,8 @@ class AuthService:
             raise UserInputException("Passwords does not match!")
         if models.UserModel.query.filter_by(username=username).first():
             raise UserInputException(f"User with username {username} already exists")
+        if models.UserModel.query.filter_by(email=email).first():
+            raise UserInputException(f"User with email {email} already exists")
 
         new_user = models.UserModel(username=username, email=email)
         new_user.set_password(password)
@@ -66,6 +68,12 @@ class AuthService:
             return decorated_function
 
         return login_required
+
+    @staticmethod
+    def find_users():
+        users = models.UserModel.query.all()
+        users = map(lambda x: str(x), users)
+        return list(users)
 
     def change_pass(self, change_pass_form: ChangePassForm) -> None:
         # TODO: change it for new db usage
