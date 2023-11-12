@@ -27,8 +27,11 @@
 </head>
 
 <body>
-
-{% include "header.html" %}
+{% if unauthorized %}
+    {% include "header.html" %}
+{% else %}
+    {% include "authorized_header.html" %}
+{% endif %}
 {% include "flash.html" %}
 <main>
     {% block content %}

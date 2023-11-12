@@ -2,7 +2,6 @@ import json
 from functools import wraps
 from hashlib import sha256
 from flask import session, redirect, url_for
-from flask_bcrypt import Bcrypt
 from flask_login import login_user
 
 from app import db, login_manager
@@ -39,18 +38,19 @@ class AuthService:
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
-        self.set_session_value(username)
+        login_user(new_user)
 
     def authenticate(self, form: forms.LoginForm):
         username = form.login.data
         password = form.password.data
+        remember = form.remember.data
 
         user: models.UserModel = models.UserModel.query.filter_by(username=username).first()
         if not user:
             raise UserInputException(f"No such a user with username {username}")
 
         if user.check_password(password):
-            login_user(user)
+            login_user(user, remember=remember)
         else:
             raise UserInputException("Wrong username of password")
 
@@ -59,18 +59,6 @@ class AuthService:
 
     def is_pre_authorized(self) -> bool:
         return session and session.get(self._SESSION_KEY)
-
-    def get_pre_login_decorator(self):
-        def login_required(f):
-            @wraps(f)
-            def decorated_function(*args, **kwargs):
-                if not self.is_pre_authorized():
-                    return redirect(url_for('login_page'))
-                return f(*args, **kwargs)
-
-            return decorated_function
-
-        return login_required
 
     @staticmethod
     def find_users():

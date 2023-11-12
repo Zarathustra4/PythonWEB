@@ -1,4 +1,4 @@
-from flask_login import login_required
+from flask_login import login_required, logout_user, current_user
 
 from app import app, login_manager
 from app.domain.models import TodoModel
@@ -15,8 +15,8 @@ from app.service.todo_service import add_todo, update_todo, delete_todo
 SKILLS = ["C++", "Python", "Java", "Spring", "Math", "SQL", "REST API", "Git", "Linux", "HTML/CSS"]
 auth_service = AuthService()
 
-pre_authorized = auth_service.get_pre_login_decorator()
 login_manager.login_view = 'login_page'
+login_manager.login_message_category = 'error'
 
 
 @app.route("/")
@@ -61,7 +61,7 @@ def skills_page(id=None):
 @app.route("/login", methods=['GET'])
 def login_page():
     login_form = forms.LoginForm()
-    return render_template("login.html", form=login_form)
+    return render_template("login.html", form=login_form, unauthorized=True)
 
 
 @app.route("/login", methods=['POST'])
@@ -84,7 +84,7 @@ def login():
 @app.route("/logout", methods=["POST"])
 @login_required
 def logout():
-    session.clear()
+    logout_user()
     return redirect(url_for("login"))
 
 
@@ -190,10 +190,9 @@ def todo_delete(id: int):
 
 
 @app.route("/sign-up", methods=["GET"])
-@login_required
 def signup_page():
     form = forms.RegisterForm()
-    return render_template("signup.html", form=form)
+    return render_template("signup.html", form=form, unauthorized=True)
 
 
 @app.route("/sign-up", methods=["POST"])
@@ -219,3 +218,10 @@ def users_page():
     return render_template('users.html',
                            users_list=users,
                            total_users=len(users))
+
+
+@app.route("/account", methods=['GET'])
+@login_required
+def account_page():
+    user = current_user
+    return render_template("account.html", current_user=user)
