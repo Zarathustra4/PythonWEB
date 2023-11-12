@@ -1,4 +1,6 @@
-from app import app
+from flask_login import login_required
+
+from app import app, login_manager
 from app.domain.models import TodoModel
 from app.service.auth_service import AuthService
 from app.service.auth_service import get_session_dict
@@ -14,34 +16,34 @@ SKILLS = ["C++", "Python", "Java", "Spring", "Math", "SQL", "REST API", "Git", "
 auth_service = AuthService()
 
 pre_authorized = auth_service.get_pre_login_decorator()
+login_manager.login_view = 'login_page'
 
 
 @app.route("/")
-@pre_authorized
+@login_required
 def main_page():
     return render_template("index.html",
                            cookies=get_session_dict(),
-                           user_login=auth_service.get_session_value(),
                            os_name=platform.system(),
                            user_agent=request.user_agent,
                            time=datetime.datetime.now())
 
 
 @app.route("/hobbies")
-@pre_authorized
+@login_required
 def hobbies_page():
     return render_template("hobbies.html")
 
 
 @app.route("/study")
-@pre_authorized
+@login_required
 def study_page():
     return render_template("studying.html")
 
 
 @app.route("/skills")
 @app.route("/skills/<int:id>")
-@pre_authorized
+@login_required
 def skills_page(id=None):
     is_list = True
     if id:
@@ -80,6 +82,7 @@ def login():
 
 
 @app.route("/logout", methods=["POST"])
+@login_required
 def logout():
     session.clear()
     return redirect(url_for("login"))
@@ -104,7 +107,7 @@ def delete_cookie(key=None):
 
 
 @app.route("/change-password", methods=["GET"])
-@pre_authorized
+@login_required
 def change_password_page():
     form = forms.ChangePassForm()
     return render_template("change-password.html", form=form)
@@ -125,7 +128,7 @@ def change_password():
 
 
 @app.route("/todo", methods=['GET'])
-@pre_authorized
+@login_required
 def todo_page():
     todo_form = forms.TodoForm()
     todo_list = TodoModel.query.all()
@@ -133,7 +136,6 @@ def todo_page():
 
 
 @app.route("/todo", methods=['POST'])
-@pre_authorized
 def create_todo():
     todo_form = forms.TodoForm()
     try:
@@ -147,6 +149,7 @@ def create_todo():
 
 
 @app.route("/todo/update/<int:id>", methods=["GET"])
+@login_required
 def todo_update_page(id: int):
     try:
         todo_model = TodoModel.query.get(id)
@@ -187,6 +190,7 @@ def todo_delete(id: int):
 
 
 @app.route("/sign-up", methods=["GET"])
+@login_required
 def signup_page():
     form = forms.RegisterForm()
     return render_template("signup.html", form=form)
@@ -208,8 +212,8 @@ def signup():
     return redirect(url_for('main_page'))
 
 
-
 @app.route("/users", methods=["GET"])
+@login_required
 def users_page():
     users = AuthService.find_users()
     return render_template('users.html',

@@ -1,3 +1,5 @@
+from flask_login import UserMixin
+
 from app import db
 from enum import Enum
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -15,7 +17,7 @@ class TodoModel(db.Model):
     status = db.Column(db.Enum(StatusEnum))
 
 
-class UserModel(db.Model):
+class UserModel(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(125), unique=True, nullable=False)
     email = db.Column(db.String(125), unique=True, nullable=False)

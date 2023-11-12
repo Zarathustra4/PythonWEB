@@ -3,18 +3,24 @@ from functools import wraps
 from hashlib import sha256
 from flask import session, redirect, url_for
 from flask_bcrypt import Bcrypt
+from flask_login import login_user
 
-from app import db
+from app import db, login_manager
 from app.domain.exception import UserInputException
 from app.domain.forms import ChangePassForm
 from app.domain import forms
 from app.domain import models
+from app.domain.models import UserModel
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return UserModel.query.get(user_id)
 
 
 class AuthService:
     def __init__(self):
         self._SESSION_KEY = "user_login"
-        self.bcrypt = Bcrypt()
 
     def create_user(self, form: forms.RegisterForm):
         username = form.username.data
@@ -44,7 +50,7 @@ class AuthService:
             raise UserInputException(f"No such a user with username {username}")
 
         if user.check_password(password):
-            self.set_session_value(username)
+            login_user(user)
         else:
             raise UserInputException("Wrong username of password")
 
@@ -53,9 +59,6 @@ class AuthService:
 
     def is_pre_authorized(self) -> bool:
         return session and session.get(self._SESSION_KEY)
-
-    def get_session_value(self):
-        return session[self._SESSION_KEY]
 
     def get_pre_login_decorator(self):
         def login_required(f):
