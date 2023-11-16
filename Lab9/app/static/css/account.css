@@ -14,3 +14,9 @@
     max-width: 20%;
     border-radius: 15px;
 }
+
+.date {
+    font-family: 'Roboto', sans-serif;
+    color: #4d4c4c;
+    font-size: 14px;
+}

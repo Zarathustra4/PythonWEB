@@ -48,6 +48,8 @@ class RegisterForm(FlaskForm):
                                                                    Length(min=8, max=30),
                                                                    EqualTo("password", "Passwords don't match")])
 
+    about = TextAreaField("About me")
+
     image = FileField("Image", validators=[FileRequired()])
     submit = SubmitField('Sign up')
 
@@ -60,6 +62,8 @@ class UpdateForm(FlaskForm):
                                                           "underscores")])
     email = StringField('Email',
                         validators=[DataRequired("Email field mustn't be empty"), Email("It should be an email")])
+
+    about = TextAreaField("About me")
 
     image = FileField("Image")
 

@@ -24,6 +24,7 @@ class UserModel(UserMixin, db.Model):
     about = db.Column(db.Text, nullable=True)
     password_hash = db.Column(db.String(256), nullable=False)
     image = db.Column(db.String(256), nullable=False, default="/default.jpg")
+    last_seen = db.Column(db.DateTime, nullable=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

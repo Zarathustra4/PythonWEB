@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 from functools import wraps
@@ -59,6 +60,10 @@ class AuthService:
             login_user(user, remember=remember)
         else:
             raise UserInputException("Wrong username of password")
+
+        user.last_seen = datetime.datetime.now().date()
+        db.session.commit()
+
 
     def set_session_value(self, value: str) -> None:
         session[self._SESSION_KEY] = value

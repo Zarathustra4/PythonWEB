@@ -6,6 +6,7 @@
 
 {% block links %}
     <link rel="stylesheet" href="../static/css/account.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap">
 {% endblock %}
 
 {% block content %}
@@ -17,5 +18,6 @@
                  src="../static/images/{{ current_user.image }}"
                  alt="Profile picture">
         </p>
+    <p class="date">Last seen - {{ current_user.last_seen }}</p>
     </div>
 {% endblock %}
