@@ -112,9 +112,9 @@ def change_password_page():
 @app.route("/change-password", methods=["POST"])
 def change_password():
     change_pass_form = forms.ChangePassForm()
-
+    user = current_user
     try:
-        auth_service.change_pass(change_pass_form)
+        auth_service.change_pass(user, change_pass_form)
     except UserInputException as e:
         flash(str(e), category="error")
         return redirect(url_for("change_password_page"))
@@ -194,7 +194,7 @@ def signup_page():
 @app.route("/sign-up", methods=["POST"])
 def signup():
     form = forms.RegisterForm()
-    if form.validate_on_submit():
+    if not form.validate():
         flash("Form is not valid", category="error")
         return redirect(url_for("signup_page"))
     try:
@@ -227,7 +227,7 @@ def account_page():
 @login_required
 def update_page():
     user = current_user
-    form = forms.UpdateForm(username=user.username, email=user.email)
+    form = forms.UpdateForm(username=user.username, email=user.email, about=user.about)
     return render_template("update.html", form=form)
 
 

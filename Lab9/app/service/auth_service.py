@@ -29,6 +29,7 @@ class AuthService:
         username = form.username.data
         email = form.email.data
         password = form.password.data
+        about = form.about.data
         image = form.image.data
 
         if models.UserModel.query.filter_by(username=username).first():
@@ -41,7 +42,8 @@ class AuthService:
             config.basedir, 'app', 'static', 'images', filename
         ))
 
-        new_user = models.UserModel(username=username, email=email, image=filename)
+        new_user = models.UserModel(username=username, email=email, image=filename,
+                                    about=about, last_seen=datetime.datetime.now().date())
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
@@ -87,6 +89,7 @@ class AuthService:
     def update_user(self, form: forms.UpdateForm, user_id: int):
         username = form.username.data
         email = form.email.data
+        about = form.about.data
         image = form.image.data
 
         user = UserModel.query.filter_by(id=user_id).first()
@@ -106,31 +109,22 @@ class AuthService:
         user.username = username
         user.email = email
         user.image = filename
+        user.about = about
         db.session.commit()
 
-    def change_pass(self, change_pass_form: ChangePassForm) -> None:
+    def change_pass(self, user: UserModel, change_pass_form: ChangePassForm) -> None:
         # TODO: change it for new db usage
         if not change_pass_form.validate():
             raise UserInputException("Form is not valid")
 
         old_pass = change_pass_form.old_password.data
         new_pass = change_pass_form.new_password.data
-        repeat_pass = change_pass_form.repeated_password.data
 
-        if sha256(old_pass.encode()).hexdigest() != self.credentials["password"]:
-            raise UserInputException("Wrong password!!!")
-        if new_pass != repeat_pass:
-            raise UserInputException("New password and repeated password are not same!!!")
-        if len(new_pass) < 4:
-            raise UserInputException("Password must be at least 4 characters long")
+        if not user.check_password(old_pass):
+            raise UserInputException("Wrong password")
 
-        new_pass = sha256(new_pass.encode()).hexdigest()
-        self.credentials["password"] = new_pass
-
-        json_cred = json.dumps(self.credentials, indent=2)
-
-        with open(self.json_path, "w") as f:
-            f.write(json_cred)
+        user.set_password(new_pass)
+        db.session.commit()
 
 
 def get_session_dict() -> dict:

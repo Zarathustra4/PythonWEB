@@ -32,23 +32,25 @@ class TodoForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(),
-                                                   Length(min=4, max=14),
-                                                   Regexp('^[A-Za-z][A-Za-z0-9_\\.]*$', 0,
-                                                          "Username must only have letters, numbers, dots or " +
-                                                          "underscores")])
+    username = StringField('Username',
+                           validators=[DataRequired(),
+                                       Length(min=4, max=14),
+                                       Regexp('^[A-Za-z][A-Za-z0-9_\\.]*$', 0,
+                                              "Username must only have letters, numbers, dots or " +
+                                              "underscores")])
+
     email = StringField('Email', validators=[DataRequired("Email field mustn't be empty"),
                                              Email()])
 
     password = PasswordField('Password',
                              validators=[DataRequired("Password field mustn't be empty"),
-                                         Length(min=8, max=30)])
+                                         Length(min=8, max=30),
+                                         EqualTo("repeat_password", "Passwords don't match")])
 
     repeat_password = PasswordField('Repeat Password', validators=[DataRequired(),
-                                                                   Length(min=8, max=30),
-                                                                   EqualTo("password", "Passwords don't match")])
+                                                                   Length(min=8, max=30)])
 
-    about = TextAreaField("About me")
+    about = TextAreaField("About me", validators=[])
 
     image = FileField("Image", validators=[FileRequired()])
     submit = SubmitField('Sign up')
