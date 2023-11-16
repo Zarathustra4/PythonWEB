@@ -21,12 +21,8 @@ login_manager.login_message_category = 'error'
 
 @app.route("/")
 @login_required
-def main_page():
-    return render_template("index.html",
-                           cookies=get_session_dict(),
-                           os_name=platform.system(),
-                           user_agent=request.user_agent,
-                           time=datetime.datetime.now())
+def index():
+    return redirect(url_for("account_page"))
 
 
 @app.route("/hobbies")
@@ -78,7 +74,7 @@ def login():
         flash(str(e), category="error")
         return redirect(url_for("login_page"))
 
-    return redirect(url_for("main_page"))
+    return redirect(url_for("index"))
 
 
 @app.route("/logout", methods=["POST"])
@@ -93,7 +89,7 @@ def post_cookie():
     key = request.form.get('key')
     value = request.form.get('value')
     session[key] = value
-    return redirect(url_for("main_page"))
+    return redirect(url_for("index"))
 
 
 @app.route("/cookie/delete/<key>", methods=["POST"])
@@ -103,7 +99,7 @@ def delete_cookie(key=None):
         session.pop(key)
     else:
         session.clear()
-    return redirect(url_for("main_page"))
+    return redirect(url_for("index"))
 
 
 @app.route("/change-password", methods=["GET"])
@@ -124,7 +120,7 @@ def change_password():
         return redirect(url_for("change_password_page"))
 
     flash("The password was successfully changed", category="message")
-    return redirect(url_for("main_page"))
+    return redirect(url_for("index"))
 
 
 @app.route("/todo", methods=['GET'])
@@ -198,7 +194,7 @@ def signup_page():
 @app.route("/sign-up", methods=["POST"])
 def signup():
     form = forms.RegisterForm()
-    if not form.validate():
+    if form.validate_on_submit():
         flash("Form is not valid", category="error")
         return redirect(url_for("signup_page"))
     try:
@@ -208,7 +204,7 @@ def signup():
         return redirect(url_for('signup_page'))
     else:
         flash("User was successfully created")
-    return redirect(url_for('main_page'))
+    return redirect(url_for('index'))
 
 
 @app.route("/users", methods=["GET"])
@@ -225,3 +221,31 @@ def users_page():
 def account_page():
     user = current_user
     return render_template("account.html", current_user=user)
+
+
+@app.route("/update", methods=["GET"])
+@login_required
+def update_page():
+    user = current_user
+    form = forms.UpdateForm(username=user.username, email=user.email)
+    return render_template("update.html", form=form)
+
+
+@app.route("/update", methods=["POST"])
+@login_required
+def update():
+    form = forms.UpdateForm()
+    user_id = current_user.id
+    if not form.validate():
+        flash("Form is not valid", category="error")
+        return redirect(url_for("index"))
+
+    try:
+        auth_service.update_user(form, user_id)
+    except UserInputException as e:
+        flash(str(e), category='message')
+    else:
+        flash("User data was successfully updated")
+
+    return redirect(url_for("index"))
+

@@ -1,0 +1,16 @@
+.image-wrapper {
+    text-align: center;
+}
+
+.email {
+    font-size: 20px;
+}
+
+.account-data {
+    text-align: center;
+}
+
+.account-image {
+    max-width: 20%;
+    border-radius: 15px;
+}

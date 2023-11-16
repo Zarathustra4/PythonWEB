@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired
 from wtforms import StringField, BooleanField, SubmitField, TextAreaField, SelectField, PasswordField
-from wtforms.validators import DataRequired, Length, AnyOf, Email, Regexp
+from wtforms.validators import DataRequired, Length, AnyOf, Email, Regexp, EqualTo
 from app.domain.models import StatusEnum
 
 
@@ -36,7 +37,30 @@ class RegisterForm(FlaskForm):
                                                    Regexp('^[A-Za-z][A-Za-z0-9_\\.]*$', 0,
                                                           "Username must only have letters, numbers, dots or " +
                                                           "underscores")])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=30)])
-    repeat_password = PasswordField('Repeat Password', validators=[DataRequired(), Length(min=8, max=30)])
+    email = StringField('Email', validators=[DataRequired("Email field mustn't be empty"),
+                                             Email()])
+
+    password = PasswordField('Password',
+                             validators=[DataRequired("Password field mustn't be empty"),
+                                         Length(min=8, max=30)])
+
+    repeat_password = PasswordField('Repeat Password', validators=[DataRequired(),
+                                                                   Length(min=8, max=30),
+                                                                   EqualTo("password", "Passwords don't match")])
+
+    image = FileField("Image", validators=[FileRequired()])
     submit = SubmitField('Sign up')
+
+
+class UpdateForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(),
+                                                   Length(min=4, max=14),
+                                                   Regexp('^[A-Za-z][A-Za-z0-9_\\.]*$', 0,
+                                                          "Username must only have letters, numbers, dots or " +
+                                                          "underscores")])
+    email = StringField('Email',
+                        validators=[DataRequired("Email field mustn't be empty"), Email("It should be an email")])
+
+    image = FileField("Image")
+
+    submit = SubmitField('Update')
