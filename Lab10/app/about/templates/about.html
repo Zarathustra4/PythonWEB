@@ -1,10 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block title %}Hobbies{% endblock %}
+
+{% block image %}
+    <img style="max-height: 300px" src="../static/images/hobbies.jpg" alt="">
+{% endblock %}
+
+{% block text %}
+    <p>
+        Playing the piano is my favorite hobby. I love the feeling of creating music with my own hands, and I enjoy the
+        challenge of learning new pieces. I also find playing the piano to be a very relaxing and meditative activity.
+    </p>
+    <p>
+        I started playing the piano when I was seven years old. I took lessons for a few years, but then I stopped
+        because I
+        got too busy with school and other activities. However, I picked it up again a few years ago, and I've been
+        playing
+        ever since.
+    </p>
+    I mostly play classical music, but I also enjoy playing some jazz and pop songs. I'm currently working on learning
+    to play Beethoven's "Moonlight Sonata." It's a challenging piece, but I'm really enjoying it.
+    <p>
+        I find playing the piano to be a very rewarding hobby. It's a great way to express myself creatively, and it's
+        also
+        a lot of fun. I highly recommend playing the piano to anyone who is looking for a new hobby.
+    </p>
+{% endblock %}

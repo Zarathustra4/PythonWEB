@@ -2,3 +2,8 @@ from flask import Blueprint
 
 todo_bp = Blueprint("todo_bp", __name__,
                     template_folder="templates", url_prefix="/todo")
+
+
+@todo_bp.route("/")
+def todo_page():
+    ...

@@ -12,3 +12,18 @@ def main_page():
 @auth_bp.route("/login")
 def login_page():
     return "Login"
+
+
+@auth_bp.route("/users")
+def users_page():
+    ...
+
+
+@auth_bp.route("/update")
+def update_page():
+    ...
+
+
+@auth_bp.route("/signup")
+def signup_page():
+    ...
