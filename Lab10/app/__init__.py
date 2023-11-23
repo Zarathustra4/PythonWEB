@@ -16,6 +16,7 @@ def create_app(config_name='default'):
 
     from app.auth import models
     from app.todo import models
+    from app.assigment import models
 
     db.init_app(app)
     migrate.init_app(app, db)
