@@ -122,69 +122,69 @@ def delete_cookie(key=None):
 #     flash("The password was successfully changed", category="message")
 #     return redirect(url_for("index"))
 
-
-@app.route("/todo", methods=['GET'])
-@login_required
-def todo_page():
-    todo_form = forms.TodoForm()
-    todo_list = TodoModel.query.all()
-    return render_template('todo.html', form=todo_form, todo_list=todo_list)
-
-
-@app.route("/todo", methods=['POST'])
-def create_todo():
-    todo_form = forms.TodoForm()
-    try:
-        add_todo(todo_form)
-    except UserInputException as e:
-        flash(str(e), category="error")
-    else:
-        flash("Todo was successfully addded!")
-
-    return redirect(url_for("todo_page"))
-
-
-@app.route("/todo/update/<int:id>", methods=["GET"])
-@login_required
-def todo_update_page(id: int):
-    try:
-        todo_model = TodoModel.query.get(id)
-    except Exception as e:
-        flash(str(e), category="error")
-        return redirect(url_for('todo_page'))
-    todo_form = forms.TodoForm()
-    todo_form.todo.data = todo_model.todo
-    todo_form.status.data = todo_model.status
-    todo_form.submit.label.text = 'Update'
-
-    return render_template("todo_update.html", id=id, form=todo_form)
-
-
-@app.route("/todo/update/<int:id>", methods=["POST"])
-def todo_update(id: int):
-    todo_form = forms.TodoForm()
-    try:
-        update_todo(todo_form, id)
-    except UserInputException as e:
-        flash(str(e), category="error")
-    else:
-        flash("Todo task is updated")
-    finally:
-        return redirect(url_for("todo_page"))
-
-
-@app.route("/todo/delete/<int:id>", methods=["POST"])
-def todo_delete(id: int):
-    try:
-        delete_todo(id)
-    except UserInputException as e:
-        flash(str(e), category="error")
-    else:
-        flash("Todo task is deleted")
-    finally:
-        return redirect(url_for("todo_page"))
-
 #
+# @app.route("/todo", methods=['GET'])
+# @login_required
+# def todo_page():
+#     todo_form = forms.TodoForm()
+#     todo_list = TodoModel.query.all()
+#     return render_template('todo.html', form=todo_form, todo_list=todo_list)
+#
+#
+# @app.route("/todo", methods=['POST'])
+# def create_todo():
+#     todo_form = forms.TodoForm()
+#     try:
+#         add_todo(todo_form)
+#     except UserInputException as e:
+#         flash(str(e), category="error")
+#     else:
+#         flash("Todo was successfully addded!")
+#
+#     return redirect(url_for("todo_page"))
+#
+#
+# @app.route("/todo/update/<int:id>", methods=["GET"])
+# @login_required
+# def todo_update_page(id: int):
+#     try:
+#         todo_model = TodoModel.query.get(id)
+#     except Exception as e:
+#         flash(str(e), category="error")
+#         return redirect(url_for('todo_page'))
+#     todo_form = forms.TodoForm()
+#     todo_form.todo.data = todo_model.todo
+#     todo_form.status.data = todo_model.status
+#     todo_form.submit.label.text = 'Update'
+#
+#     return render_template("todo_update.html", id=id, form=todo_form)
+#
+#
+# @app.route("/todo/update/<int:id>", methods=["POST"])
+# def todo_update(id: int):
+#     todo_form = forms.TodoForm()
+#     try:
+#         update_todo(todo_form, id)
+#     except UserInputException as e:
+#         flash(str(e), category="error")
+#     else:
+#         flash("Todo task is updated")
+#     finally:
+#         return redirect(url_for("todo_page"))
+#
+#
+# @app.route("/todo/delete/<int:id>", methods=["POST"])
+# def todo_delete(id: int):
+#     try:
+#         delete_todo(id)
+#     except UserInputException as e:
+#         flash(str(e), category="error")
+#     else:
+#         flash("Todo task is deleted")
+#     finally:
+#         return redirect(url_for("todo_page"))
+#
+# #
 # @app.route("/sign-up", methods=["GET"])
 # def signup_page():
 #     form = forms.RegisterForm()
