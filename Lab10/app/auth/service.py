@@ -93,7 +93,6 @@ def update_user(form: forms.UpdateForm, user_id: int):
 
 
 def change_pass(user: UserModel, change_pass_form: ChangePassForm) -> None:
-    # TODO: change it for new db usage
     if not change_pass_form.validate():
         raise UserInputException("Form is not valid")
     old_pass = change_pass_form.old_password.data

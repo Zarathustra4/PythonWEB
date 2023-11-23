@@ -19,69 +19,69 @@ login_manager.login_view = 'login_page'
 login_manager.login_message_category = 'error'
 
 
-@app.route("/")
-@login_required
-def index():
-    return redirect(url_for("account_page"))
-
-
-@app.route("/hobbies")
-@login_required
-def hobbies_page():
-    return render_template("hobbies.html")
-
-
-@app.route("/study")
-@login_required
-def study_page():
-    return render_template("studying.html")
-
-
-@app.route("/skills")
-@app.route("/skills/<int:id>")
-@login_required
-def skills_page(id=None):
-    is_list = True
-    if id:
-        skills = SKILLS[id:id + 1] if 0 <= id < len(SKILLS) else ["Wrong index!!!"]
-        is_list = False
-    else:
-        skills = SKILLS
-
-    return render_template("skills.html",
-                           len=len(skills),
-                           is_list=is_list,
-                           skills=skills)
-
-
-@app.route("/login", methods=['GET'])
-def login_page():
-    login_form = forms.LoginForm()
-    return render_template("login.html", form=login_form, unauthorized=True)
-
-
-@app.route("/login", methods=['POST'])
-def login():
-    login_form = forms.LoginForm()
-    if not login_form.validate():
-        flash("Form is not valid", category="error")
-        return redirect(url_for("login_page"))
-
-    try:
-        auth_service.authenticate(login_form)
-        flash("You were successfully logged in", category="message")
-    except UserInputException as e:
-        flash(str(e), category="error")
-        return redirect(url_for("login_page"))
-
-    return redirect(url_for("index"))
-
-
-@app.route("/logout", methods=["POST"])
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for("login"))
+# @app.route("/")
+# @login_required
+# def index():
+#     return redirect(url_for("account_page"))
+#
+#
+# @app.route("/hobbies")
+# @login_required
+# def hobbies_page():
+#     return render_template("hobbies.html")
+#
+#
+# @app.route("/study")
+# @login_required
+# def study_page():
+#     return render_template("studying.html")
+#
+#
+# @app.route("/skills")
+# @app.route("/skills/<int:id>")
+# @login_required
+# def skills_page(id=None):
+#     is_list = True
+#     if id:
+#         skills = SKILLS[id:id + 1] if 0 <= id < len(SKILLS) else ["Wrong index!!!"]
+#         is_list = False
+#     else:
+#         skills = SKILLS
+#
+#     return render_template("skills.html",
+#                            len=len(skills),
+#                            is_list=is_list,
+#                            skills=skills)
+#
+#
+# @app.route("/login", methods=['GET'])
+# def login_page():
+#     login_form = forms.LoginForm()
+#     return render_template("login.html", form=login_form, unauthorized=True)
+#
+#
+# @app.route("/login", methods=['POST'])
+# def login():
+#     login_form = forms.LoginForm()
+#     if not login_form.validate():
+#         flash("Form is not valid", category="error")
+#         return redirect(url_for("login_page"))
+#
+#     try:
+#         auth_service.authenticate(login_form)
+#         flash("You were successfully logged in", category="message")
+#     except UserInputException as e:
+#         flash(str(e), category="error")
+#         return redirect(url_for("login_page"))
+#
+#     return redirect(url_for("index"))
+#
+#
+# @app.route("/logout", methods=["POST"])
+# @login_required
+# def logout():
+#     logout_user()
+#     return redirect(url_for("login"))
 
 
 @app.route("/cookie", methods=["POST"])
@@ -102,25 +102,25 @@ def delete_cookie(key=None):
     return redirect(url_for("index"))
 
 
-@app.route("/change-password", methods=["GET"])
-@login_required
-def change_password_page():
-    form = forms.ChangePassForm()
-    return render_template("change-password.html", form=form)
-
-
-@app.route("/change-password", methods=["POST"])
-def change_password():
-    change_pass_form = forms.ChangePassForm()
-    user = current_user
-    try:
-        auth_service.change_pass(user, change_pass_form)
-    except UserInputException as e:
-        flash(str(e), category="error")
-        return redirect(url_for("change_password_page"))
-
-    flash("The password was successfully changed", category="message")
-    return redirect(url_for("index"))
+# @app.route("/change-password", methods=["GET"])
+# @login_required
+# def change_password_page():
+#     form = forms.ChangePassForm()
+#     return render_template("change-password.html", form=form)
+#
+#
+# @app.route("/change-password", methods=["POST"])
+# def change_password():
+#     change_pass_form = forms.ChangePassForm()
+#     user = current_user
+#     try:
+#         auth_service.change_pass(user, change_pass_form)
+#     except UserInputException as e:
+#         flash(str(e), category="error")
+#         return redirect(url_for("change_password_page"))
+#
+#     flash("The password was successfully changed", category="message")
+#     return redirect(url_for("index"))
 
 
 @app.route("/todo", methods=['GET'])
@@ -184,68 +184,68 @@ def todo_delete(id: int):
     finally:
         return redirect(url_for("todo_page"))
 
-
-@app.route("/sign-up", methods=["GET"])
-def signup_page():
-    form = forms.RegisterForm()
-    return render_template("signup.html", form=form, unauthorized=True)
-
-
-@app.route("/sign-up", methods=["POST"])
-def signup():
-    form = forms.RegisterForm()
-    if not form.validate():
-        flash("Form is not valid", category="error")
-        return redirect(url_for("signup_page"))
-    try:
-        auth_service.create_user(form)
-    except UserInputException as e:
-        flash(str(e), category="error")
-        return redirect(url_for('signup_page'))
-    else:
-        flash("User was successfully created")
-    return redirect(url_for('index'))
-
-
-@app.route("/users", methods=["GET"])
-@login_required
-def users_page():
-    users = AuthService.find_users()
-    return render_template('users.html',
-                           users_list=users,
-                           total_users=len(users))
-
-
-@app.route("/account", methods=['GET'])
-@login_required
-def account_page():
-    user = current_user
-    return render_template("account.html", current_user=user)
-
-
-@app.route("/update", methods=["GET"])
-@login_required
-def update_page():
-    user = current_user
-    form = forms.UpdateForm(username=user.username, email=user.email, about=user.about)
-    return render_template("update.html", form=form)
-
-
-@app.route("/update", methods=["POST"])
-@login_required
-def update():
-    form = forms.UpdateForm()
-    user_id = current_user.id
-    if not form.validate():
-        flash("Form is not valid", category="error")
-        return redirect(url_for("index"))
-
-    try:
-        auth_service.update_user(form, user_id)
-    except UserInputException as e:
-        flash(str(e), category='message')
-    else:
-        flash("User data was successfully updated")
-
-    return redirect(url_for("index"))
-
+#
+# @app.route("/sign-up", methods=["GET"])
+# def signup_page():
+#     form = forms.RegisterForm()
+#     return render_template("signup.html", form=form, unauthorized=True)
+#
+#
+# @app.route("/sign-up", methods=["POST"])
+# def signup():
+#     form = forms.RegisterForm()
+#     if not form.validate():
+#         flash("Form is not valid", category="error")
+#         return redirect(url_for("signup_page"))
+#     try:
+#         auth_service.create_user(form)
+#     except UserInputException as e:
+#         flash(str(e), category="error")
+#         return redirect(url_for('signup_page'))
+#     else:
+#         flash("User was successfully created")
+#     return redirect(url_for('index'))
+#
+#
+# @app.route("/users", methods=["GET"])
+# @login_required
+# def users_page():
+#     users = AuthService.find_users()
+#     return render_template('users.html',
+#                            users_list=users,
+#                            total_users=len(users))
+#
+#
+# @app.route("/account", methods=['GET'])
+# @login_required
+# def account_page():
+#     user = current_user
+#     return render_template("account.html", current_user=user)
+#
+#
+# @app.route("/update", methods=["GET"])
+# @login_required
+# def update_page():
+#     user = current_user
+#     form = forms.UpdateForm(username=user.username, email=user.email, about=user.about)
+#     return render_template("update.html", form=form)
+#
+#
+# @app.route("/update", methods=["POST"])
+# @login_required
+# def update():
+#     form = forms.UpdateForm()
+#     user_id = current_user.id
+#     if not form.validate():
+#         flash("Form is not valid", category="error")
+#         return redirect(url_for("index"))
+#
+#     try:
+#         auth_service.update_user(form, user_id)
+#     except UserInputException as e:
+#         flash(str(e), category='message')
+#     else:
+#         flash("User data was successfully updated")
+#
+#     return redirect(url_for("index"))
+#
