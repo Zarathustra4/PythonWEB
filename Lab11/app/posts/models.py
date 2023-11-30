@@ -3,12 +3,12 @@ from enum import Enum
 
 
 class TypeEnum(Enum):
-    NEWS = "News"
     PUBLICATION = "Publication"
+    NEWS = "News"
     OTHER = "Other"
 
 
-class Post(db.Model):
+class PostModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(226), nullable=False)
     text = db.Column(db.String(226), nullable=True)
