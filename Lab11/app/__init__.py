@@ -7,6 +7,7 @@ from app.todo.views import todo_bp
 from app.cookies.views import cookies_bp
 from app.about.views import about_bp
 from app.assigment.views import assigment_bp
+from app.posts.views import posts_bp
 
 
 def create_app(config_name='default'):
@@ -17,6 +18,7 @@ def create_app(config_name='default'):
     from app.auth import models
     from app.todo import models
     from app.assigment import models
+    from app.posts import models
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -28,5 +30,6 @@ def create_app(config_name='default'):
         app.register_blueprint(todo_bp)
         app.register_blueprint(cookies_bp)
         app.register_blueprint(assigment_bp)
+        app.register_blueprint(posts_bp)
 
     return app

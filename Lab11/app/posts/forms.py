@@ -1,0 +1,4 @@
+
+
+class CreatePostForm(FlaskForm):
+    ...
