@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Account
+{% endblock %}
+
+{% block links %}
+    <link rel="stylesheet" href="../static/css/account.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap">
+{% endblock %}
+
+{% block content %}
+    <div class="account-data">
+        <h1>{{ current_user.username }}</h1>
+        <p class="email">Email: {{ current_user.email }}</p>
+        <p class="image-wrapper">
+            <img class="account-image"
+                 src="../static/images/{{ current_user.image }}"
+                 alt="Profile picture">
+        </p>
+        <div class="about-wrapper">
+            <p class="about">{{ current_user.about }}</p>
+        </div>
+        <p class="date">Last seen - {{ current_user.last_seen }}</p>
+    </div>
+{% endblock %}
