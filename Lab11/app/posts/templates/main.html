@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Posts
+{% endblock %}
+
+{% block content %}
+    <form method="get" class="create" action="/posts/create">
+        <button class="btn btn-info">Create post</button>
+    </form>
+
+    {% for post in posts %}
+        <div class="post-container">
+            <h2 class="post-title">{{ post.title }}</h2>
+            <p class="post-text">{{ post.text }}</p>
+            <img class="post-image" src="../../static/posts/images/{{ post.image }}" alt="Post Image">
+            <p class="post-type">Type: {{ post.post_type.value }}</p>
+            <p class="post-created">Created: {{ post.created }}</p>
+            <a href="{{ post.id }}">More...</a>
+        </div>
+    {% endfor %}
+
+    <style>
+        .post-container {
+            margin: 50px auto;
+            width: 50%;
+            padding: 30px;
+            background-color: lightblue;
+        }
+
+        .post-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .post-text {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .post-image {
+            max-width: 50%;
+            margin-top: 10px;
+        }
+
+        .post-created, .post-type, .post-enabled, .post-user-id {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .create {
+            text-align: center;
+        }
+    </style>
+{% endblock %}

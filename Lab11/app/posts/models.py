@@ -7,6 +7,9 @@ class TypeEnum(Enum):
     NEWS = "News"
     OTHER = "Other"
 
+class CategoryModel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
 
 class PostModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)

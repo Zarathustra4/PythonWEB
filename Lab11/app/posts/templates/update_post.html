@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block title %}
+    Create Post
+{% endblock %}
+
+{% block content %}
+    <div style="background-color: #a0c09e; margin: 50px auto; padding: 30px; width: 50%">
+        <form class="center-form" action="/posts/{{ id }}/update" method="post" enctype="multipart/form-data">
+            {{ form.csrf_token() }}
+            {{ render_field(form.title, class="form-control") }}
+            {{ render_field(form.text, class="form-control") }}
+            {{ render_field(form.post_type, class="form-control") }}
+
+            {{ render_field(form.image, class="form-control") }}
+
+            {{ form.submit(class="btn btn-success") }}
+        </form>
+    </div>
+{% endblock %}
