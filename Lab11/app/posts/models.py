@@ -18,7 +18,7 @@ class TagModel(db.Model):
     name = db.Column(db.String(50))
 
     def __repr__(self):
-        return f'<Tag "{self.name}">'
+        return f'#{self.name} '
 
 
 class CategoryModel(db.Model):

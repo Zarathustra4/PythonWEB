@@ -3,7 +3,7 @@ import os
 from werkzeug.utils import secure_filename
 
 from app.posts.forms import CreatePostForm, UpdatePostForm
-from app.posts.models import PostModel, CategoryModel
+from app.posts.models import PostModel, CategoryModel, TagModel
 from datetime import datetime
 from flask_login import current_user
 
@@ -17,6 +17,7 @@ NOT_FOUND_MESSAGE = "There is no such a post with id {id}"
 
 def post_model_to_dto(model: PostModel):
     category = CategoryModel.query.filter_by(id=model.category_id).first()
+    tags = map(lambda tag: str(tag), model.tags)
     return PostDto(title=model.title,
                    text=model.text,
                    image=model.image,
@@ -25,16 +26,22 @@ def post_model_to_dto(model: PostModel):
                    user_id=model.user_id,
                    category=category.name,
                    id=model.id,
-                   post_type=model.post_type)
+                   post_type=model.post_type,
+                   tags=list(tags))
 
 
 def get_all_cats():
     return CategoryModel.query.all()
 
 
+def get_all_tags():
+    return TagModel.query.all()
+
+
 def get_create_post_form():
     form = CreatePostForm()
     form.category.choices = [(cat.id, cat.name) for cat in get_all_cats()]
+    form.tags.choices = [(tag.id, tag.name) for tag in get_all_tags()]
     return form
 
 
@@ -65,6 +72,7 @@ def post_model_to_form(post: PostModel):
                           image=post.image,
                           post_type=post.post_type)
     form.category.choices = [(cat.id, cat.name) for cat in get_all_cats()]
+    form.tags.choices = [(tag.id, tag.name) for tag in get_all_tags()]
     return form
 
 
@@ -97,6 +105,7 @@ def update_post(id: int, post_form: CreatePostForm):
     post.image = filename
     post.category_id = post_form.category.data
     post.post_type = post_form.post_type.data
+    post.tags = [TagModel.query.get(tag_id) for tag_id in post_form.tags.data]
 
     db.session.commit()
 
@@ -117,7 +126,8 @@ def create_post(post_form: CreatePostForm):
                      image=filename,
                      created=date,
                      category_id=post_form.category.data,
-                     user_id=user_id)
+                     user_id=user_id,
+                     tags=[TagModel.query.get(tag_id) for tag_id in post_form.tags.data])
 
     db.session.add(post)
     db.session.commit()

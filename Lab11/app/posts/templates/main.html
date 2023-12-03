@@ -17,6 +17,11 @@
              <p class="post-type">Type: {{ post.post_type.value }}</p>
             <p class="post-type">Category: {{ post.category }}</p>
             <p class="post-created">Created: {{ post.created }}</p>
+            <p>Tags
+                {% for tag in post.tags %}
+                    <span style="color:blue">{{ tag }} </span>
+                {% endfor %}
+            </p>
             <a href="{{ post.id }}">More...</a>
         </div>
     {% endfor %}

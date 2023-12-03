@@ -8,7 +8,8 @@ class PostDto:
                  enabled,
                  user_id,
                  post_type,
-                 category):
+                 category,
+                 tags):
 
         self.id = id
         self.title = title
@@ -19,4 +20,5 @@ class PostDto:
         self.user_id = user_id
         self.post_type = post_type
         self.category = category
+        self.tags = tags
 
