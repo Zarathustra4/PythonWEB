@@ -29,7 +29,7 @@ def post_page(id: int):
 @posts_bp.route("/create", methods=["GET"])
 @login_required
 def create_post_page():
-    form = CreatePostForm()
+    form = service.get_create_post_form()
     return render_template("create_post.html", form=form)
 
 

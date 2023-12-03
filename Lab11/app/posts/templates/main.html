@@ -14,7 +14,8 @@
             <h2 class="post-title">{{ post.title }}</h2>
             <p class="post-text">{{ post.text }}</p>
             <img class="post-image" src="../../static/posts/images/{{ post.image }}" alt="Post Image">
-            <p class="post-type">Type: {{ post.post_type.value }}</p>
+             <p class="post-type">Type: {{ post.post_type.value }}</p>
+            <p class="post-type">Category: {{ post.category }}</p>
             <p class="post-created">Created: {{ post.created }}</p>
             <a href="{{ post.id }}">More...</a>
         </div>

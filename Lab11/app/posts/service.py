@@ -3,23 +3,51 @@ import os
 from werkzeug.utils import secure_filename
 
 from app.posts.forms import CreatePostForm, UpdatePostForm
-from app.posts.models import PostModel
+from app.posts.models import PostModel, CategoryModel
 from datetime import datetime
 from flask_login import current_user
 
 import config
+from .dto import PostDto
 from ..exceptions import UserInputException
 from ..extensions import db
 
 NOT_FOUND_MESSAGE = "There is no such a post with id {id}"
 
 
+def post_model_to_dto(model: PostModel):
+    category = CategoryModel.query.filter_by(id=model.category_id).first()
+    return PostDto(title=model.title,
+                   text=model.text,
+                   image=model.image,
+                   created=model.created,
+                   enabled=model.enabled,
+                   user_id=model.user_id,
+                   category=category.name,
+                   id=model.id,
+                   post_type=model.post_type)
+
+
+def get_all_cats():
+    return CategoryModel.query.all()
+
+
+def get_create_post_form():
+    form = CreatePostForm()
+    form.category.choices = [(cat.id, cat.name) for cat in get_all_cats()]
+    return form
+
+
 def get_all_posts() -> list:
-    return PostModel.query.all()
+    posts = PostModel.query.all()
+    posts_dtos = map(post_model_to_dto, posts)
+    return list(posts_dtos)
 
 
-def get_post_by_id(id: int) -> PostModel:
-    return PostModel.query.filter_by(id=id).first()
+def get_post_by_id(id: int) -> PostDto:
+    return post_model_to_dto(
+        PostModel.query.filter_by(id=id).first()
+    )
 
 
 def delete_post_by_id(id: int) -> None:
@@ -32,10 +60,12 @@ def delete_post_by_id(id: int) -> None:
 
 
 def post_model_to_form(post: PostModel):
-    return UpdatePostForm(title=post.title,
+    form = UpdatePostForm(title=post.title,
                           text=post.text,
                           image=post.image,
                           post_type=post.post_type)
+    form.category.choices = [(cat.id, cat.name) for cat in get_all_cats()]
+    return form
 
 
 def get_post_form_by_id(id: int):
@@ -65,6 +95,8 @@ def update_post(id: int, post_form: CreatePostForm):
     post.text = post_form.text.data
     post.created = datetime.now().date()
     post.image = filename
+    post.category_id = post_form.category.data
+    post.post_type = post_form.post_type.data
 
     db.session.commit()
 
@@ -84,7 +116,7 @@ def create_post(post_form: CreatePostForm):
                      text=post_form.text.data,
                      image=filename,
                      created=date,
-                     post_type=post_form.post_type.data,
+                     category_id=post_form.category.data,
                      user_id=user_id)
 
     db.session.add(post)

@@ -11,6 +11,7 @@ class CreatePostForm(FlaskForm):
     text = TextAreaField("Text")
     image = FileField("Image", validators=[FileRequired()])
     post_type = SelectField("Type", choices=[(e.name, e.value) for e in TypeEnum])
+    category = SelectField('Category', coerce=int)
     submit = SubmitField('Create a post')
 
 
@@ -19,4 +20,5 @@ class UpdatePostForm(FlaskForm):
     text = TextAreaField("Text")
     image = FileField("Image")
     post_type = SelectField("Type", choices=[(e.name, e.value) for e in TypeEnum])
+    category = SelectField('Category', coerce=int)
     submit = SubmitField('Update a post')
