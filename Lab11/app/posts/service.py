@@ -48,7 +48,9 @@ def get_create_post_form():
 def get_all_posts() -> list:
     posts = PostModel.query.all()
     posts_dtos = map(post_model_to_dto, posts)
-    return list(posts_dtos)
+    posts_dtos = list(posts_dtos)
+    posts_dtos.sort(key=lambda dto: dto.created, reverse=True)
+    return posts_dtos
 
 
 def get_post_by_id(id: int) -> PostDto:
@@ -101,7 +103,7 @@ def update_post(id: int, post_form: CreatePostForm):
 
     post.title = post_form.title.data
     post.text = post_form.text.data
-    post.created = datetime.now().date()
+    post.created = datetime.now()
     post.image = filename
     post.category_id = post_form.category.data
     post.post_type = post_form.post_type.data
@@ -111,7 +113,7 @@ def update_post(id: int, post_form: CreatePostForm):
 
 
 def create_post(post_form: CreatePostForm):
-    date = datetime.now().date()
+    date = datetime.now()
     user_id = current_user.get_id()
 
     image = post_form.image.data
