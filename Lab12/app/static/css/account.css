@@ -1,0 +1,37 @@
+.image-wrapper {
+    text-align: center;
+}
+
+.email {
+    font-size: 20px;
+}
+
+.account-data {
+    text-align: center;
+}
+
+.account-image {
+    max-width: 20%;
+    border-radius: 15px;
+}
+
+.date {
+    font-family: 'Roboto', sans-serif;
+    color: #4d4c4c;
+    font-size: 14px;
+}
+
+.about {
+    font-size: 25px;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.6;
+    color: beige;
+}
+
+.about-wrapper {
+    width: 65%;
+    margin: 20px auto;
+    background-color: #343434;
+    padding: 10px;
+    border-radius: 10px;
+}

@@ -30,6 +30,7 @@ def create_user(form: forms.RegisterForm):
     if models.UserModel.query.filter_by(email=email).first():
         raise UserInputException(f"User with email {email} already exists")
 
+    # TODO: add another way (pillow module)
     filename = secure_filename(image.filename)
     image.save(os.path.join(
         config.basedir, 'app', 'static', 'images', filename

@@ -38,6 +38,7 @@ class RegisterForm(FlaskForm):
                                                                    Length(min=8, max=30)])
 
     about = TextAreaField("About me", validators=[])
+    # TODO: add extensions validator 
 
     image = FileField("Image", validators=[FileRequired()])
     submit = SubmitField('Sign up')

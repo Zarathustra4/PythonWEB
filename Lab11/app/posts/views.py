@@ -11,6 +11,8 @@ posts_bp = Blueprint("posts_bp", __name__,
                      url_prefix="/posts")
 
 
+# TODO: add restricted photo size and shape
+
 @posts_bp.route("/")
 @login_required
 def main_page():

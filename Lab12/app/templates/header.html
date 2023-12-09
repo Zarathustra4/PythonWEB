@@ -1,0 +1,27 @@
+{% set navigation_links = {
+    'auth_bp.login_page': 'Login',
+    'about_bp.about_page': 'Hobbies',
+    'about_bp.study_page': 'Studying',
+    'about_bp.skills_page': 'Skills',
+    'todo_bp.todo_page': 'TODO',
+    'auth_bp.signup_page': 'Sign up',
+    'auth_bp.users_page' : 'Users'
+} %}
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                {% for page, label in navigation_links.items() %}
+                    <a class="nav-item nav-link" href="{{ url_for(page) }}">{{ label }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        <form class="header-form" action="/change-password" method="get">
+            <button type="submit" class="btn btn-outline-dark">Change password</button>
+        </form>
+        <form class="header-form" action="/logout" method="POST">
+            <button type="submit" class="btn btn-outline-secondary">Log out</button>
+        </form>
+    </nav>
+</header>
