@@ -5,7 +5,7 @@ from flask_testing import TestCase
 
 from app import create_app
 from app.auth.views import logout
-from ..auth.models import UserModel
+from app.auth.models import UserModel
 
 TEST_USERNAME = "test_user"
 TEST_EMAIL = "test_user@gmail.com"
@@ -28,6 +28,7 @@ class ViewsTest(TestCase):
     def create_app(self):
         app = create_app()
         app.config['TESTING'] = True
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 
         return app
 

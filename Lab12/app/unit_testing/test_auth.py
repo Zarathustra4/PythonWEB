@@ -23,12 +23,24 @@ class AuthTest(TestCase):
         app = create_app()
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 
         return app
 
+    def create_test_user(self):
+        # Login
+        data = {'username': TEST_USERNAME,
+                'email': TEST_EMAIL}
+
+        test_user = UserModel(**data)
+        test_user.set_password(TEST_PASSWORD)
+
+        db.session.add(test_user)
+
     def setUp(self):
-        logout()
         db.create_all()
+        self.create_test_user()
+        logout()
 
     def tearDown(self):
         db.session.remove()
@@ -49,12 +61,13 @@ class AuthTest(TestCase):
     def test_success_login(self):
         """Test of success login"""
         logout()
-        response = self.client.post(url_for('auth_bp.login_page'), data=dict(
-            login=TEST_USERNAME,
-            password=TEST_PASSWORD,
-            remember='y',
-            submit='Log In'
-        ))
+        response = self.client.post(url_for('auth_bp.login_page'),
+                                    data=dict(
+                                        login=TEST_USERNAME,
+                                        password=TEST_PASSWORD,
+                                        remember='y',
+                                        submit='Log In'
+                                    ))
 
         expected_location = url_for("auth_bp.main_page")
         self.assertEqual(response.location, expected_location)
@@ -74,14 +87,6 @@ class AuthTest(TestCase):
 
     def test_logout(self):
         """Test of logout"""
-        # Login
-        data = {'username': TEST_USERNAME,
-                'email': TEST_EMAIL}
-
-        test_user = UserModel(**data)
-        test_user.set_password(TEST_PASSWORD)
-
-        db.session.add(test_user)
 
         response = self.client.post(url_for('auth_bp.login_page'), data=dict(
             login=TEST_USERNAME,

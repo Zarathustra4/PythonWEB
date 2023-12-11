@@ -7,7 +7,7 @@ from flask_testing import TestCase
 from app import create_app
 from app.auth.models import UserModel
 from app.todo.models import TodoModel, StatusEnum
-from ..extensions import db
+from app.extensions import db
 
 TEST_USERNAME = "test_user"
 TEST_EMAIL = "test_user@gmail.com"
@@ -27,6 +27,7 @@ class AuthTest(TestCase):
         app = create_app()
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 
         return app
 
