@@ -24,7 +24,7 @@ def login():
     login_user(test_user, remember=True)
 
 
-class PortfolioTest(TestCase):
+class ViewsTest(TestCase):
     def create_app(self):
         app = create_app()
         app.config['TESTING'] = True

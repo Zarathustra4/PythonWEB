@@ -7,6 +7,7 @@ from flask_testing import TestCase
 from app import create_app
 from app.auth.views import logout
 from app.auth.models import UserModel
+from ..extensions import db
 
 TEST_USERNAME = "test_user"
 TEST_EMAIL = "test_user@gmail.com"
@@ -25,9 +26,16 @@ class AuthTest(TestCase):
 
         return app
 
+    def setUp(self):
+        logout()
+        db.create_all()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
     def test_success_register(self):
         """Test of registration"""
-        logout()
         data = {'username': TEST_REGISTER_USERNAME,
                 'email': TEST_REGISTER_EMAIL,
                 'password': TEST_REGISTER_PASSWORD,
@@ -53,7 +61,6 @@ class AuthTest(TestCase):
 
     def test_failed_login(self):
         """Test of failed login"""
-        logout()
         response = self.client.post(url_for('auth_bp.login_page'),
                                     data=dict(
                                         login=TEST_USERNAME,
@@ -68,6 +75,14 @@ class AuthTest(TestCase):
     def test_logout(self):
         """Test of logout"""
         # Login
+        data = {'username': TEST_USERNAME,
+                'email': TEST_EMAIL}
+
+        test_user = UserModel(**data)
+        test_user.set_password(TEST_PASSWORD)
+
+        db.session.add(test_user)
+
         response = self.client.post(url_for('auth_bp.login_page'), data=dict(
             login=TEST_USERNAME,
             password=TEST_PASSWORD,

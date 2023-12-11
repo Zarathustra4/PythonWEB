@@ -30,9 +30,16 @@ class AuthTest(TestCase):
 
         return app
 
+    def setUp(self):
+        db.create_all()
+        login()
+
+    def tearDown(self):
+        db.session.remove()
+        db.drop_all()
+
     def test_creation(self):
         """Test of todo creation"""
-        login()
 
         response = self.client.post(
             url_for("todo_bp.create_todo"),
@@ -49,7 +56,6 @@ class AuthTest(TestCase):
 
     def test_update(self):
         """Test updating todo"""
-        login()
 
         test_todo = TodoModel(todo="Update test", status="TODO")
         db.session.add(test_todo)
@@ -72,7 +78,6 @@ class AuthTest(TestCase):
 
     def test_delete(self):
         """Test deleting todo"""
-        login()
 
         test_todo = TodoModel(todo="Delete test", status="TODO")
         db.session.add(test_todo)
