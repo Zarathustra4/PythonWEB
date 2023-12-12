@@ -2,7 +2,7 @@ import os
 
 from werkzeug.utils import secure_filename
 
-from app.posts.forms import CreatePostForm, UpdatePostForm
+from app.posts.forms import CreatePostForm, UpdatePostForm, TagForm, CatForm
 from app.posts.models import PostModel, CategoryModel, TagModel
 from datetime import datetime
 from flask_login import current_user
@@ -132,4 +132,24 @@ def create_post(post_form: CreatePostForm):
                      tags=[TagModel.query.get(tag_id) for tag_id in post_form.tags.data])
 
     db.session.add(post)
+    db.session.commit()
+
+
+def create_tag(tag_form: TagForm):
+    tag_name = tag_form.tag_name.data
+    if TagModel.query.filter_by(name=tag_name).first() is not None:
+        raise UserInputException("Such tag already exists")
+
+    tag = TagModel(name=tag_name)
+    db.session.add(tag)
+    db.session.commit()
+
+
+def create_cat(cat_form: CatForm):
+    cat_name = cat_form.cat_name.data
+    if CategoryModel.query.filter_by(name=cat_name).first() is not None:
+        raise UserInputException("Such category already exists")
+
+    cat = CategoryModel(name=cat_name)
+    db.session.add(cat)
     db.session.commit()

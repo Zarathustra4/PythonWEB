@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block title %}
+    Create Tag
+{% endblock %}
+
+{% block content %}
+    <form class="center-form" action="/posts/tag" method="post">
+        {{ form.csrf_token() }}
+        {{ render_field(form.tag_name, class="form-control") }}
+
+        {{ form.submit(class="btn btn-success") }}
+    </form>
+{% endblock %}

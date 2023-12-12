@@ -24,3 +24,13 @@ class UpdatePostForm(FlaskForm):
     category = SelectField('Category', coerce=int)
     tags = SelectMultipleField('Tags', coerce=int, choices=[])
     submit = SubmitField('Update a post')
+
+
+class TagForm(FlaskForm):
+    tag_name = StringField("Tag name", validators=[DataRequired()])
+    submit = SubmitField("Create a tag")
+
+
+class CatForm(FlaskForm):
+    cat_name = StringField("Category name", validators=[DataRequired()])
+    submit = SubmitField("Create a category")
