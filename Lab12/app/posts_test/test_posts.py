@@ -1,5 +1,6 @@
 import io
 import pytest
+from werkzeug.datastructures import FileStorage
 
 from app import create_app
 from ..auth.models import UserModel
@@ -14,7 +15,6 @@ TEST_POST_TITLE = "Test post title"
 TEST_POST_TEXT = "Test post text"
 TEST_POST_TYPE = "PUBLICATION"
 IMAGE_PATH = "E:\\Лабораторні\\3 курс\\Python WEB\\Lab12\\app\\posts_test\\unity.jpg"
-TEST_POST_IMAGE = (open(IMAGE_PATH, "rb"), "unity.jpg")
 
 
 def create_tag_cat(db):
@@ -66,13 +66,16 @@ def login(client):
 
 @pytest.fixture
 def post_id(client, login):
+    with open(IMAGE_PATH, "rb") as image_file:
+        image = FileStorage(stream=io.BytesIO(image_file.read()), filename='unity.jpg', content_type='image/jpeg')
+
     client.post(
         "/posts/create",
         data=dict(
             title=TEST_POST_TITLE,
             text=TEST_POST_TEXT,
             type=TEST_POST_TYPE,
-            image=TEST_POST_IMAGE,
+            image=(image, "unity.jpg"),
             category=1,
             tags=1
         )
