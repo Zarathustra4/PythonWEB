@@ -127,6 +127,7 @@ def create_post(post_form: CreatePostForm):
                      text=post_form.text.data,
                      image=filename,
                      created=date,
+                     post_type=post_form.post_type.data,
                      category_id=post_form.category.data,
                      user_id=user_id,
                      tags=[TagModel.query.get(tag_id) for tag_id in post_form.tags.data])

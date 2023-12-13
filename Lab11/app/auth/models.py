@@ -6,7 +6,7 @@ from ..extensions import db, login_manager
 
 @login_manager.user_loader
 def user_loader(user_id):
-    return UserModel.query.get(int(user_id))
+    return UserModel.query.get(str(user_id))
 
 
 class UserModel(UserMixin, db.Model):

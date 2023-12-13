@@ -19,6 +19,7 @@ def main_page():
 
 
 @posts_bp.route("/<int:id>")
+@login_required
 def post_page(id: int):
     if id is None:
         flash("There is no post with such id")
