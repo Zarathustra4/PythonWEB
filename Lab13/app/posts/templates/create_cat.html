@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block title %}
+    Create Cat
+{% endblock %}
+
+{% block content %}
+    <form class="center-form" action="/posts/cat" method="post" enctype="multipart/form-data">
+        {{ form.csrf_token() }}
+        {{ render_field(form.cat_name, class="form-control") }}
+
+        {{ form.submit(class="btn btn-success") }}
+    </form>
+{% endblock %}

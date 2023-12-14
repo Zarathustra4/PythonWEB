@@ -1,0 +1,9 @@
+main {
+    color: #343434;
+    background-color: #a0c09e;
+}
+
+form.center-form {
+    margin: 30px auto;
+    width: 50%;
+}
