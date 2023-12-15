@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Posts
+{% endblock %}
+
+{% block content %}
+
+    <div class="post-container">
+        <h2 class="post-title">{{ post.title }}</h2>
+        <p class="post-text">{{ post.text }}</p>
+        <img class="post-image" src="../../static/posts/images/{{ post.image }}" alt="Post Image">
+        <p class="post-created">Created: {{ post.created }}</p>
+        <p class="post-type">Type: {{ post.post_type.value }}</p>
+        <p class="post-type">Category: {{ post.category }}</p>
+        <p>Tags
+            {% for tag in post.tags %}
+                <span style="color:blue">{{ tag }} </span>
+            {% endfor %}
+        </p>
+        <p class="post-enabled">Enabled: {{ post.enabled }}</p>
+        <p class="post-user-id">User ID: {{ post.user_id }}</p>
+
+        <div class="buttons">
+            <form method="get" action="/posts/{{ post.id }}/update">
+                <button class="btn btn-primary action">Update</button>
+            </form>
+            <form method="post" action="/posts/{{ post.id }}/delete">
+                <button class="btn btn-danger action">Delete</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <style>
+        .post-container {
+            margin: 50px auto;
+            width: 50%;
+            padding: 30px;
+            background-color: lightblue;
+        }
+
+        .post-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .post-text {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .post-image {
+            max-width: 50%;
+            margin-top: 10px;
+        }
+
+        .post-created, .post-type, .post-enabled, .post-user-id {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .buttons {
+            display: flex;
+        }
+
+        button.action {
+            margin-right: 30px;
+        }
+    </style>
+{% endblock %}

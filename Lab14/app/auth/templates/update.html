@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+
+{% block title %}
+    Update account info
+{% endblock %}
+
+{% block content %}
+    <form class="center-form" action="/update" method="post" enctype="multipart/form-data">
+        {{ form.csrf_token() }}
+        {{ render_field(form.username, class="form-control") }}
+        {{ render_field(form.email, class="form-control") }}
+        {{ render_field(form.about, class="form-control") }}
+        {{ render_field(form.image, class="form-control") }}
+        {{ form.submit(class="btn btn-success") }}
+    </form>
+{% endblock %}
