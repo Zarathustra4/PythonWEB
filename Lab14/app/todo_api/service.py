@@ -1,6 +1,12 @@
+import datetime
+
+from flask import current_app
+from flask_jwt_extended import create_access_token
+
 from app.todo.models import TodoModel, StatusEnum
+from ..auth.models import UserModel
 from ..exceptions import UserInputException
-from ..extensions import db
+from ..extensions import db, jwt_manager
 
 
 def model_to_dict(model: TodoModel) -> dict:
@@ -73,3 +79,14 @@ def delete_todo(todo_id: int) -> dict:
     TodoModel.query.filter_by(id=todo_id).delete()
     db.session.commit()
     return {"message": "The todo record was deleted"}
+
+
+def generate_token(username: str, password):
+    auth_message = "Wrong username or password"
+    user = UserModel.query.filter_by(username=username).first()
+    if user is None:
+        raise UserInputException(auth_message)
+    if not user.check_password(password):
+        raise UserInputException(auth_message)
+
+    return create_access_token(identity=username)

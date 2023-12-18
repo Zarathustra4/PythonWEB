@@ -1,5 +1,5 @@
 from flask import Flask
-from .extensions import db, migrate, login_manager
+from .extensions import db, migrate, login_manager, jwt_manager
 
 from config import config
 from app.auth.views import auth_bp
@@ -24,6 +24,7 @@ def create_app(config_name='default'):
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    jwt_manager.init_app(app)
 
     with app.app_context():
         app.register_blueprint(auth_bp)

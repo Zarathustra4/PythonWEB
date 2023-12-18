@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, current_app
 
 from app.exceptions import UserInputException
 from app.todo_api import service
@@ -44,3 +44,16 @@ def delete_todo(todo_id: int):
         return service.delete_todo(todo_id)
     except UserInputException as e:
         return {"message": str(e)}, 400
+
+
+@todo_api.route("/token", methods=["GET"])
+def get_token():
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    try:
+        token = service.generate_token(username, password)
+    except UserInputException as e:
+        return {"message": str(e)}
+    else:
+        return {"token": token}
+
