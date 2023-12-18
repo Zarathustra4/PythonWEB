@@ -1,11 +1,12 @@
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/2238c5ee-ef3a-4084-8ca9-a4643a9d87f4)
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/123ebadf-f020-407e-8d3a-da41958d04a4)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/a39aae6a-5023-42c3-8d5c-0d3dae955eba)
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/4d2a4017-6bea-46b6-8d52-c13462e6cf3b)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/205bc27d-a6df-4dcd-a1dc-a1fda1039aa7)
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/8217ac5b-517e-45df-a01b-0296037a2102)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/895bcb09-bc2b-4e1e-9759-c2f024381a06)
+Without bearer jwt token
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/31edd0e2-a4ab-49f5-9216-79e74c188815)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/58392aa4-dcb7-4fb8-96cc-1ae5f89762bf)
+With jwt token
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/bece908a-e822-4aac-a261-2dfa2e46a611)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/e59b43ff-42e2-48af-b67c-eb0a90e0826a)
