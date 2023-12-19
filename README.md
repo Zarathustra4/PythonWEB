@@ -9,3 +9,5 @@
 ![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/97ee1804-9407-4beb-a011-815a8f92af96)
 
 ![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/11983cbc-6c53-4350-8399-6ca831db291c)
+
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/cea0f81b-6e31-40af-9780-967746d1fd5c)
