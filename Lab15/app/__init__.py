@@ -1,4 +1,6 @@
 from flask import Flask
+
+from .api_user.res import users_api
 from .extensions import db, migrate, login_manager, jwt_manager
 
 from config import config
@@ -9,6 +11,7 @@ from app.about.views import about_bp
 from app.assigment.views import assigment_bp
 from app.posts.views import posts_bp
 from app.todo_api.routes import todo_api
+from app.swagger.docs import swagger_bp
 
 
 def create_app(config_name='default'):
@@ -34,5 +37,7 @@ def create_app(config_name='default'):
         app.register_blueprint(assigment_bp)
         app.register_blueprint(posts_bp)
         app.register_blueprint(todo_api)
+        app.register_blueprint(users_api)
+        app.register_blueprint(swagger_bp)
 
     return app
