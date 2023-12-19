@@ -1,11 +1,11 @@
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/2238c5ee-ef3a-4084-8ca9-a4643a9d87f4)
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/83c5b623-75ce-41ac-a3cf-4a64dc5e5ab0)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/a39aae6a-5023-42c3-8d5c-0d3dae955eba)
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/c20e394f-8d04-42c1-be5a-08dfa068736a)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/205bc27d-a6df-4dcd-a1dc-a1fda1039aa7)
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/7244dd55-0df8-4a81-b06c-bd2161babc7e)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/895bcb09-bc2b-4e1e-9759-c2f024381a06)
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/019f86fe-3169-4b71-b2f7-c98f7f358cbe)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/58392aa4-dcb7-4fb8-96cc-1ae5f89762bf)
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/97ee1804-9407-4beb-a011-815a8f92af96)
 
-![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/e59b43ff-42e2-48af-b67c-eb0a90e0826a)
+![image](https://github.com/Zarathustra4/PythonWEB/assets/68013193/11983cbc-6c53-4350-8399-6ca831db291c)
