@@ -7,13 +7,18 @@ client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 client_socket.connect((HOST, PORT))
 
-message = input("Input your message >>> ")
+message = ""
 
-try:
+while message != "CLOSE": 
+    print("\n----------------------------\n")
+    message = input("Input your message >>> ")
+
     client_socket.send(message.encode())
-except Exception as e:
-    print(e)
-else:
     print("The message was sent")
+
+    echo_message = client_socket.recv(1024)
+
+    print(f"[Echo message] - {echo_message.decode()}")
+    print("\n----------------------------\n")
 
 client_socket.close()
